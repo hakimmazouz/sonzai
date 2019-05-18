@@ -1,0 +1,51 @@
+.projects-section {
+	padding: 5vw;
+
+	h2 {
+		text-transform: uppercase;
+		margin-top: 40px;
+		margin-bottom: 20px;
+		font-size: 32px;
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+
+		li {
+			flex-basis: calc(33.33% - 60px);
+			margin-bottom: 60px;
+			margin-right: 60px;
+			list-style: none;
+
+			a {
+				display: block;
+				text-decoration: none;
+
+				p {
+					color: $color--black;
+				}
+			}
+
+			h3 {
+				border-bottom: 1px solid $color--blue;
+				padding: 5px 0;
+			}
+
+			h4 {
+				margin-bottom: 20px;
+				padding: 5px 0;
+				font-weight: 300;
+				font-size: 14px;
+			}
+
+			h3,
+			h4 {
+				text-transform: uppercase;
+				color: $color--blue-faded;
+			}
+		}
+	}
+}

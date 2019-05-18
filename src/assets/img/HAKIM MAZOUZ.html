@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:8080/ -->
+<html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="./HAKIM MAZOUZ_files/css" rel="stylesheet">
+	<title>HAKIM MAZOUZ</title>
+
+<style type="text/css">* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  margin: 0; }
+
+html,
+body {
+  padding: 0;
+  margin: 0; }
+
+body {
+  background-color: #FFF8F5;
+  font-family: "Roboto Mono", monospace;
+  overflow: hidden; }
+  body canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20; }
+  body.rulers:before, body.rulers:after {
+    content: '';
+    opacity: 0.25;
+    position: absolute;
+    background-color: #45538B; }
+  body.rulers:before {
+    left: 0%;
+    top: calc(50% - 20px);
+    height: 1px;
+    width: 100%; }
+  body.rulers:after {
+    left: calc(50% - 20px);
+    top: 0%;
+    width: 1px;
+    height: 100%; }
+
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px; }
+
+.box {
+  border: 2px solid #091E6A;
+  background-color: white; }
+
+.main-box {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: 8; }
+  .main-box .hidden {
+    transform: translateY(40px);
+    opacity: 0; }
+  .main-box .content {
+    position: absolute;
+    display: none;
+    padding: 60px;
+    text-align: center; }
+  .main-box__message h1 {
+    text-transform: uppercase;
+    text-align: center;
+    color: #45538B; }
+    .main-box__message h1 span {
+      display: inline-block;
+      transform: rotate(90deg);
+      letter-spacing: -7px; }
+  .main-box__intro h2 {
+    text-transform: uppercase;
+    color: #45538B; }
+  .main-box__intro p {
+    line-height: 1.5;
+    margin-top: 20px;
+    min-width: 600px;
+    color: #091E6A; }
+  .main-box__agenda {
+    padding: 0 !important; }
+    .main-box__agenda header {
+      border-bottom: 2px solid #091E6A;
+      height: 30px; }
+    .main-box__agenda ul {
+      margin: 0;
+      padding-right: 60px;
+      margin-bottom: 100px;
+      text-align: left;
+      margin-top: 10px; }
+      .main-box__agenda ul li {
+        list-style: none;
+        text-transform: uppercase;
+        font-size: 20px;
+        color: rgba(69, 83, 139, 0.5);
+        padding: 10px 20px;
+        position: relative; }
+        .main-box__agenda ul li:after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 0px;
+          background-color: #091E6A;
+          transition: width .25s ease-out;
+          z-index: -1; }
+        .main-box__agenda ul li.active {
+          transition: color .25s ease-out;
+          color: black; }
+    .main-box__agenda .progress {
+      padding: 20px;
+      text-align: left;
+      width: calc(100% - 2px); }
+      .main-box__agenda .progress h4 {
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: 400;
+        color: #45538B;
+        margin-bottom: 5px; }
+      .main-box__agenda .progress__bar {
+        position: relative;
+        height: 2px;
+        background-color: rgba(69, 83, 139, 0.5); }
+        .main-box__agenda .progress__bar .inner {
+          height: 2px;
+          background-color: #091E6A;
+          width: 33%; }
+
+.loader {
+  height: 4px;
+  width: 0;
+  background-color: #45538B;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
+.slides-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: calc(100% - 300px);
+  height: 100%; }
+
+.introduction-section {
+  position: relative;
+  height: 100%;
+  padding: 5vw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  align-content: flex-end;
+  justify-content: flex-start; }
+  .introduction-section .avatar {
+    height: 50%;
+    top: 0;
+    left: 25%;
+    width: 100%;
+    background: cover center no-repeat url(0eb6e10e5f836e48c995055e535ef588.jpg);
+    position: absolute; }
+    .introduction-section .avatar__cover {
+      width: 100%;
+      height: 100%;
+      background-color: black; }
+  .introduction-section .info {
+    flex-basis: 100%;
+    transform: translateY(-80px); }
+    .introduction-section .info h1,
+    .introduction-section .info h2 {
+      color: #091E6A;
+      display: inline-block;
+      text-transform: uppercase; }
+    .introduction-section .info h1 {
+      font-size: 60px; }
+    .introduction-section .info h2 {
+      font-size: 30px; }
+  .introduction-section .facts {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start; }
+    .introduction-section .facts .fact-box:first-child {
+      margin-right: 60px; }
+    .introduction-section .facts .fact-box h3 {
+      font-size: 20px;
+      text-transform: uppercase; }
+    .introduction-section .facts .fact-box ul {
+      margin: 0; }
+      .introduction-section .facts .fact-box ul li {
+        margin: 20px 0;
+        font-size: 16px;
+        list-style: none; }
+
+.experience-section {
+  position: relative;
+  height: 100%;
+  padding: 5vw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  align-content: flex-end;
+  justify-content: flex-start; }
+</style></head><body cz-shortcut-listen="true">
+	<div class="loader" style="width: 800px; visibility: hidden;"></div>
+	<div class="main-box box" style="visibility: inherit; opacity: 1; width: 244px; height: 389px; box-shadow: rgb(244, 234, 230) 20px 20px 0px 0px; transform: matrix(1, 0, 0, 1, 40, 40); top: 0px; left: 0px;"><div class="main-box__message hidden content" style="display: none; visibility: hidden; opacity: 0; transform: matrix(1, 0, 0, 1, 0, 40);">
+	<h1>Hi Jonas<br><span>:)</span></h1>
+</div>
+
+<div class="main-box__intro hidden content" style="display: none; visibility: hidden; opacity: 0; transform: matrix(1, 0, 0, 1, 0, 40);">
+	<h2 style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">Nice to meet you</h2>
+	<p style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">Thanks for spending this time with me to help me figure out what the next step is for me. I greatly appreciate
+		this favour from you and hope to reciprocate it in the near future.</p>
+	<p style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">I will try and keep it short. Now, for the agenda</p>
+</div>
+
+<div class="main-box__agenda hidden content" style="display: inline-block; visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">
+	<header></header>
+	<ul>
+		<li style="" class="active">Introduction</li>
+		<li style="">Experience</li>
+		<li style="">Projects</li>
+		<li style="">Questions</li>
+	</ul>
+	<div class="progress">
+		<h4>00/00</h4>
+		<div class="progress__bar">
+			<div class="inner"></div>
+		</div>
+	</div>
+</div></div>
+	<div class="slides-container"><div class="introduction-section">
+	<div class="avatar" style="width: 2413px; visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">
+		<div class="avatar__cover" style="transform-origin: right center 0px; transform: matrix(0, 0, 0, 1, 0, 0);"></div>
+	</div>
+	<div class="info">
+		<h1 style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">Hakim Mazouz</h1><br>
+		<h2 style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">Creative Technologist</h2>
+	</div>
+
+	<div class="facts">
+		<div class="fact-box" style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">
+			<h3>Quick facts</h3>
+			<ul>
+				<li>📍 Copenhagen, Denmark</li>
+				<li>✊🏾 Moroccan Berber</li>
+				<li>🎮 Lifelong Gamer</li>
+			</ul>
+		</div>
+		<div class="fact-box" style="visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">
+			<h3>Skills</h3>
+			<ul>
+				<li>🌍 Love everything WWW</li>
+				<li>🤤 Dopamine is my middle name</li>
+				<li>🃏 Wildcard</li>
+			</ul>
+		</div>
+	</div>
+</div></div>
+<script type="text/javascript" src="./HAKIM MAZOUZ_files/runtime.bf0159c4d24ed37b45c3.js"></script><script type="text/javascript" src="./HAKIM MAZOUZ_files/vendors.5a8c43d7c4762bf39114.js"></script><script type="text/javascript" src="./HAKIM MAZOUZ_files/app.ba6992035c1192d97caa.js"></script>
+
+</body></html>

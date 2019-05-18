@@ -1,0 +1,65 @@
+.experience-section {
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	.section {
+		position: relative;
+		display: none;
+		height: 100%;
+		width: 100%;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		max-width: 400px;
+		margin: 0 auto;
+
+		.place {
+			border-bottom: 2px solid $color--blue;
+			max-width: 400px;
+			text-transform: uppercase;
+		}
+
+		h2,
+		h3 {
+			text-transform: uppercase;
+		}
+
+		h3 {
+			margin-top: 40px;
+			font-size: 14px;
+		}
+
+		ul {
+			list-style: none;
+
+			li {
+				margin: 20px 0;
+			}
+		}
+
+	}
+
+	.heading {
+		color: white;
+		position: absolute;
+		top: 50%;
+		left: 2.5vw;
+		transform: translateY(-50%);
+		opacity: 0;
+		font-size: 40px;
+		z-index: 8;
+		text-transform: uppercase;
+	}
+
+	.cover {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 7;
+		background-color: $color--blue;
+	}
+}
