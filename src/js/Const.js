@@ -4,3 +4,14 @@ export const BREAKPOINTS = {
 	LARGE: 1365,
 	XLARGE: 1600
 }
+
+export const SOCKET_EVENTS = {
+	HOST_UPDATE: 'host-update',
+	HOST_UPDATED: 'host-updated',
+	CONNECTED: 'connected',
+	UPDATE_SLAVES: 'update-slaves',
+}
+
+export const EVENTS = {
+	
+}

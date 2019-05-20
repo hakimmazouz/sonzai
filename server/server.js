@@ -2,8 +2,10 @@ const express = require('express')
 const path = require('path');
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const SocketController = require('./SocketController')
 
 const app = express(),
+	server = require('http').Server(app),
 	config = require('../webpack.config.js'),
 	compiler = webpack(config),
 	devMiddleware = webpackDevMiddleware(compiler, {
@@ -13,6 +15,8 @@ const app = express(),
 	DIST_DIR = __dirname,
 	HTML_FILE = path.join(DIST_DIR, 'index.html'),
 	PORT = 3000;
+
+const sockets = new SocketController(server)
 // Tell express to use the webpack-dev-middleware and use the webpack.config.js
 // configuration file as a base.
 app.use(devMiddleware);
@@ -29,6 +33,6 @@ app.get('/', (req, res) => {
 	})
 })
 
-app.listen(PORT, function () {
+server.listen(PORT, function () {
 	console.log('Server started, listening on port '+PORT+'!\n');
 });

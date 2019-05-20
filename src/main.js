@@ -14,6 +14,11 @@ import './style/style.scss'
 import './js/mojo/EventEmitter'
 
 /**
+ * Loading and globalising an instance of tiny-emitter
+ */
+import './js/Sockets'
+
+/**
  * Loading and globalising the scrollspy that tracks the use of wheel
  */
 import './js/mojo/Scrollspy'
