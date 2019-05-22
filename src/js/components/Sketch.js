@@ -4,11 +4,12 @@ export default class Sketch {
 		this._controllerInstance = sketchControllerInstance
 		this.state = this._controllerInstance.state;
 
-		this._initSketch()
+		console.log(this)
+		this.__initSketch__()
 		$events.on('beat', this.onBeat.bind(this));
 	}
 
-	_initSketch() {
+	__initSketch__() {
 		this.p.setup = () => {
 			this._setup(this.p)
 			this._controllerInstance.sketchDidSetup.call(this._controllerInstance, this);

@@ -1,4 +1,4 @@
-import Sketch from "../../mojo/Sketch";
+import Sketch from "../Sketch";
 
 export default class Landscape extends Sketch {
 	_setup(p) {
@@ -6,6 +6,6 @@ export default class Landscape extends Sketch {
 	}
 
 	_draw(p) {
-		
+
 	}
 }

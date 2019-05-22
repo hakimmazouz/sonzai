@@ -24,7 +24,7 @@ class Sockets {
 
 	_onSlaveConnected() {
 		console.log('SLAVE CONNECTED')
-		if ($app.isHost) this.syncBPM($bpm.state)
+		this.syncBPM($bpm.state)
 	}
 
 	_registerHandlers() {

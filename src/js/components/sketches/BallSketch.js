@@ -1,4 +1,4 @@
-import Sketch from "./../../mojo/Sketch";
+import Sketch from "./../Sketch";
 import { TweenLite, Power2 } from "gsap";
 
 export default class BallSketch extends Sketch {

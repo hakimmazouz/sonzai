@@ -1,5 +1,6 @@
 import p5 from 'p5'
 import BallSketch from './sketches/BallSketch'
+import BPM from './BeatController'
 
 export default class SketchController {
 	constructor(isHost) {
