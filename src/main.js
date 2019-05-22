@@ -9,14 +9,19 @@ import '@babel/polyfill'
 import './style/style.scss'
 
 /**
- * Loading and globalising an instance of tiny-emitter
+ * Loading and globalising an instance of event-emitter
  */
 import './js/mojo/EventEmitter'
 
 /**
- * Loading and globalising an instance of tiny-emitter
+ * Loading and globalising an instance of socket-controller
  */
 import './js/Sockets'
+
+/**
+ * Loading and globalising an instance of bpm-controller
+ */
+import './js/components/BPMController'
 
 /**
  * Loading and globalising the scrollspy that tracks the use of wheel

@@ -10,12 +10,14 @@ module.exports = {
 	mode: 'development',
 	devtool: 'inline-source-map',
 	entry: {
-		hmr: 'webpack-hot-middleware/client',
+		hmr: 'webpack-hot-middleware/client?reload=true',
 		app: "./src/main.js"
 	},
 	resolve: {
 		alias: {
-			"three-examples": "three/examples/js"
+			"three-examples": "three/examples/js",
+			"@mojo": path.resolve(__dirname, 'src/mojo'),
+			"@": path.resolve(__dirname, 'src')
 		}
 	},
 	devServer: {

@@ -1,44 +1,28 @@
 import p5 from 'p5'
-import Sketch from './Sketch'
-
-const WIDTH = 500,
-	HEIGHT = 250,
-	BACKGROUND = 0,
-	FILL = 255,
-	BALL_SIZE = 50,
-	HOST_UPDATE = 'host-update'
-
+import BallSketch from './sketches/BallSketch'
 
 export default class SketchController {
-	constructor(mountingNode, isHost) {
-		this.sketch = Sketch(this.setup.bind(this), this.draw.bind(this));
-		this.p5 = new p5(this.sketch)
+	constructor(isHost) {
 		this.isHost = isHost
 
-		this.state = {
-			ballX: 0,
-			ballY: 0
-		}
-
-		if (!this.isHost) $io.socket.on('host-updated', this.onHostUpdate.bind(this));
+		this._setup();
 	}
 
-	setup(p5) {
-		p5.createCanvas(WIDTH, HEIGHT, p5.WEBGL);
+	_setup() {
+		this.p5 = new p5(this._createSketch(BallSketch))
+		if (!this.isHost) {
+			$io.onHostUpdated(this.onHostUpdate.bind(this))
+		}
+		$events.on('SPACEBAR', $bpm.sync.bind($bpm))
 	}
 
-	draw(p5) {
+	sketchDidSetup(sketch) {
+	}
 
-		p5.translate(0, -p5.height/2);
-		if (this.isHost) {
-			this.state.ballY = p5.mouseY
-			this.state.ballX = Math.sin(p5.frameCount / 20) * HEIGHT;
-			this.updateHost()
-		}
+	sketchWillDraw(sketch) {
+	}
 
-		p5.background(BACKGROUND);
-		p5.fill(FILL);
-		p5.ellipse(this.state.ballX, this.state.ballY, BALL_SIZE, BALL_SIZE)
+	sketchDidDraw(sketch) {
 	}
 
 	updateHost() {
@@ -47,5 +31,9 @@ export default class SketchController {
 
 	onHostUpdate(state) {
 		this.state = state;
+	}
+
+	_createSketch(sketch) {
+		return (p5) => this.sketch = new sketch(p5, this)
 	}
 }

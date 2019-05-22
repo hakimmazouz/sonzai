@@ -10,9 +10,26 @@ class Sockets {
 		this.socket.emit('host-update', state)
 	}
 
+	syncBPM(state) {
+		this.socket.emit('sync-bpm', state)
+	}
+
+	BPMUpdate(callback) {
+		this.socket.on('bpm-update', callback)
+	}
+
+	onHostUpdated(callback) {
+		this.socket.on('host-updated', callback)
+	}
+
+	_onSlaveConnected() {
+		console.log('SLAVE CONNECTED')
+		if ($app.isHost) this.syncBPM($bpm.state)
+	}
+
 	_registerHandlers() {
 		this.socket.on('connect', () => console.log('connected to server'))
-		this.socket.on('user-connected', () => console.log('USER HAS CONNECTED TO THE SERVER'))
+		this.socket.on('slave-connected', this._onSlaveConnected.bind(this))
 	}
 }
 

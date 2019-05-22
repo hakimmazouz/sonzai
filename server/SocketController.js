@@ -2,28 +2,23 @@ const socket = require('socket.io');
 
 class SocketController {
 	constructor(http) {
+		this.bpmState = {};
 		this.io = socket(http);
-		this.host = null;
-		this.slaves = [];
-		
 		this._registerHandlers();
 	}
 
 	_registerHandlers() {
-		this.io.on('connection', this.onConnection.bind(this))
+		this.io.on('connection', this._onConnection.bind(this))
 	}
 
-	onConnection(socket) {
-		if (!this.host) {
-			this.host = socket;
-			socket.on('host-update', this.hostUpdate.bind(this))
-		} else {
-			this.slaves.push(socket)
-		};
+	_onConnection(socket) {
+		socket.on('host-update', (state) => this._hostUpdate(socket, state))
+		socket.on('sync-bpm', state => socket.broadcast.emit('bpm-update', state))
+		this.io.emit('slave-connected', socket.id)
 	}
 
-	hostUpdate(state) {
-		this.io.emit('host-updated', state)
+	_hostUpdate(socket, state) {
+		socket.broadcast.emit('host-updated', state)
 	}
 }
 
