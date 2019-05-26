@@ -1,3 +1,5 @@
+import $events from './EventEmitter'
+
 class Mouse {
 	constructor(target) {
 		this.x = target.innerWidth / 2

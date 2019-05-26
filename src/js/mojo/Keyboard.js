@@ -11,13 +11,9 @@ export const KEYCODES = {
 	ESCAPE: 27
 }
 
-function onKeyUp({
-	keyCode
-}) {
+function onKeyUp({keyCode}) {
 	Object.values(KEYCODES).map(function (key, index) {
-		if (keyCode === key) {
-			$events.emit(Object.keys(KEYCODES)[index])
-		}
+		if (keyCode === key) $events.emit(Object.keys(KEYCODES)[index])
 	})
 }
 window.addEventListener('keyup', onKeyUp);

@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
+import $bpm from './components/BeatController'
 
-class Sockets {
+export class SocketsController {
 	constructor() {
 		this.socket = io.connect(window.location.origin);
 		this._registerHandlers()
@@ -14,7 +15,7 @@ class Sockets {
 		this.socket.emit('sync-bpm', state)
 	}
 
-	BPMUpdate(callback) {
+	onBPMUpdate(callback) {
 		this.socket.on('bpm-update', callback)
 	}
 
@@ -23,16 +24,13 @@ class Sockets {
 	}
 
 	_onSlaveConnected() {
-		console.log('SLAVE CONNECTED')
-		this.syncBPM($bpm.state)
+		if (window.location.hostname.includes('localhost')) $bpm.setBPM($bpm.bpm, true)
 	}
 
 	_registerHandlers() {
 		this.socket.on('connect', () => console.log('connected to server'))
-		this.socket.on('slave-connected', this._onSlaveConnected.bind(this))
+		if (window.location.hostname.includes('localhost')) this.socket.on('slave-connected', this._onSlaveConnected.bind(this))
 	}
 }
 
-window.$io = new Sockets()
-
-export default window.$io
+export default new SocketsController();

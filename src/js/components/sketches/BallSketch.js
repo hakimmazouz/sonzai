@@ -1,5 +1,5 @@
 import Sketch from "./../Sketch";
-import { TweenLite, Power2 } from "gsap";
+import { TweenLite } from "gsap";
 
 export default class BallSketch extends Sketch {
 
@@ -8,12 +8,11 @@ export default class BallSketch extends Sketch {
 	 * 
 	 * @param {P5 Instance} p 
 	 */
-	_setup(p) {
+	setup(p) {
 		this.state = {
 			ballX: 0,
 			ballY: 0
 		}
-		p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL)
 	}
 
 	/**
@@ -22,10 +21,14 @@ export default class BallSketch extends Sketch {
 	 * @param {p5 Instance} p: the current instance of the p5 sketch
 	 * @param {Function} updateSketch: calls updateSketch and broadcasts new sketch params to the server
 	 */
-	_draw(p, updateSketch) {
-		p.background(0,0,0,100);
-		p.fill(255);
-		p.ellipse(Math.sin(p.frameCount/100) * p.width/2, this.state.ballY, 20, 20);
+	draw({tempos}) {
+		const tempo = tempos['four'];
+
+		translate(0, height/2)
+		background(50);
+		noStroke()
+		fill(255);
+		ellipse(this.state.ballX, this.state.ballY, 20, 20);
 	}
 	
 	/**
@@ -33,17 +36,11 @@ export default class BallSketch extends Sketch {
 	 * 
 	 * @param {BPMController Instance: state}  state.count
 	 */
-	onBeat({state: {count}}) {
-		TweenLite.to(this.state, 0.2, {
-			ballY: count % 2 === 0 ? window.innerHeight/2 : 0,
-		});
-	}
-
-	/**
-	 * Runs when the state updates in the SketchController
-	 * 
-	 * @param {Object} newState 
-	 */
-	stateUpdated(newState) {
+	onBeat({tempo, count, beatDuration}) {
+		if (tempo === 'four') {
+			TweenLite.to(this.state, beatDuration() / 1000, {
+				ballX: count % 2 === 0 ? window.innerWidth/2 : 0,
+			});
+		}
 	}
 }

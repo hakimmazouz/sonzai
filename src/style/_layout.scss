@@ -14,7 +14,83 @@ body {
 			left: 0;
 			z-index: 20;
 		}
+	}
 
+	#notification-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		height: auto;
+		width: 100%;
+		text-align: center;
+		padding: 60px;
+		.notification {
+			background-color: black;
+			color: white;
+			text-align: left;
+			padding: 30px;
+			max-width: 500px;
+			border-radius: 5px;
+			box-shadow: 0 2px 8px rgba(0,0,0, 0.5);
+			display: inline-flex;
+			align-items: center;
+			.icon {
+				width: 80px;
+				height: 80px;
+				flex-shrink: 0;
+				margin-right: 30px;
+				border: 1px solid white;
+				border-radius: 100%;
+			}
+			.info {
+				.header {
+					margin-bottom: 5px;
+					font-size: 12px;
+					opacity: 0.5;
+					font-weight: normal;
+				}
+				.content {
+					
+				}
+			}
+		}
+	}
+
+	#ui-layer {
+		color: white;
+		position: fixed;
+		top: 30px;
+		left: 30px;
+		border-radius: 5px;
+		background-color: #111111;
+		padding: 15px;
+		text-align: center;
+		.bpm {
+			margin-top: 10px;
+			text-align: center;
+			span {
+				font-size: 12px;
+				opacity: 0.5;
+				display: block;
+				margin-bottom: 0;
+			}
+		}
+		.knob {
+			border: 2px solid white;
+			width: 60px;
+			height: 60px;
+			position: relative;
+			border-radius: 100%;
+			&:after {
+				content: '';
+				position: absolute;
+				height: 50%;
+				width: 2px;
+				top: 0;
+				left: calc(50% - 1px);
+				background-color: goldenrod;
+			}
+		}
 	}
 
 	&.rulers {

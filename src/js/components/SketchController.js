@@ -1,40 +1,46 @@
 import p5 from 'p5'
-import BallSketch from './sketches/BallSketch'
-import BPM from './BeatController'
+import Sketches from './sketches'
+import $events from './../mojo/EventEmitter'
+import $bpm from './BeatController'
+
+import $midi from './../mojo/MIDI'
 
 export default class SketchController {
 	constructor(isHost) {
 		this.isHost = isHost
+		this.sketches = {...Sketches};
+		this.currentSketch = null
 
-		this._setup();
+		this.init()
 	}
 
-	_setup() {
-		this.p5 = new p5(this._createSketch(BallSketch))
-		if (!this.isHost) {
-			$io.onHostUpdated(this.onHostUpdate.bind(this))
+	init() {
+		this.changeSketch('BallSketch')
+		this.setup = this.setup.bind(this)
+		window.setup = this.setup;
+		this.draw = this.draw.bind(this)
+		window.draw = this.draw;
+		this.p5 = new p5()
+	}
+
+	setup() {
+		if (this.isHost) {
+			$events.on('SPACEBAR', () => $bpm.sync())
+			$midi.on('bpm-update', value => {
+				$bpm.setBPM(value, true);
+			})
 		}
-		$events.on('SPACEBAR', $bpm.sync.bind($bpm))
+		$bpm.once('beat', e => console.log('once only', e))
+		createCanvas(window.innerWidth, window.innerHeight)
 	}
 
-	sketchDidSetup(sketch) {
+	draw() {
+		$bpm.update()
+		this.currentSketch.draw($bpm);
 	}
 
-	sketchWillDraw(sketch) {
-	}
-
-	sketchDidDraw(sketch) {
-	}
-
-	updateHost() {
-		$io.broadcastState(this.state)
-	}
-
-	onHostUpdate(state) {
-		this.state = state;
-	}
-
-	_createSketch(sketch) {
-		return (p5) => this.sketch = new sketch(p5, this)
+	changeSketch(name) {
+		this.currentSketch = new this.sketches[name]($bpm);
+		this.currentSketch.setup();
 	}
 }

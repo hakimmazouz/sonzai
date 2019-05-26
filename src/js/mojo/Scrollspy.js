@@ -1,3 +1,4 @@
+import $events from './../mojo/EventEmitter'
 import {
 	debounce
 } from 'lodash'

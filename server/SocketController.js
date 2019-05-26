@@ -13,7 +13,10 @@ class SocketController {
 
 	_onConnection(socket) {
 		socket.on('host-update', (state) => this._hostUpdate(socket, state))
-		socket.on('sync-bpm', state => socket.broadcast.emit('bpm-update', state))
+		socket.on('sync-bpm', state => {
+			console.log(state)
+			socket.broadcast.emit('bpm-update', state)
+		})
 		this.io.emit('slave-connected', socket.id)
 	}
 

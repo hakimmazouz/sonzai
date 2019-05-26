@@ -33,6 +33,10 @@ class Screen {
 	isLandscape() {
 		return this.width > this.height
 	}
+
+	isPortrait() {
+		return this.width < this.height
+	}
 }
 
 export default new Screen(window)
