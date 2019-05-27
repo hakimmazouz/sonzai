@@ -38,7 +38,7 @@ export class UIManager {
 	onBPMUpdate(value) {
 		console.log(value)
 		this.$bpm.innerHTML = `${value}<br><span>BPM</span>`;
-		const rotation = map(value, 80, 180, -120, 120);
+		const rotation = map(value, 50, 180, -140, 140);
 		this.$knob.style.transform = `rotate(${rotation}deg)`
 	}
 

@@ -53,7 +53,7 @@ export class MIDI extends EventEmitter {
 			i.onmidimessage = e => {
 				if (e.data[1] === 7) {
 					console.log(e.data[2], e)
-					this.emit('bpm-update', Math.round(map(e.data[2], 0, 127, 80, 180)))
+					this.emit('bpm-update', Math.round(map(e.data[2], 0, 127, 50, 180)))
 				}
 			}
 		})

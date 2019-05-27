@@ -16,6 +16,10 @@ export default class Sketch {
 
 	}
 
+	keyPressed() {
+		
+	}
+
 	onBeat({key, tempo, progress}) {
 		console.log('LOL')
 		

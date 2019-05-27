@@ -22,13 +22,17 @@ export default class BallSketch extends Sketch {
 	 * @param {Function} updateSketch: calls updateSketch and broadcasts new sketch params to the server
 	 */
 	draw({tempos}) {
-		const tempo = tempos['four'];
+		const {progress} = tempos['four'];
+		const size = map(progress, 0, 1, 60, 30);
+		const ballAlpha = map(progress, 0, 1, 100, 0);
 
-		translate(0, height/2)
+		translate(width/2, height/2)
 		background(50);
 		noStroke()
+		fill(255, ballAlpha);
+		ellipse(this.state.ballX, this.state.ballY, size*2, size*2);
 		fill(255);
-		ellipse(this.state.ballX, this.state.ballY, 20, 20);
+		ellipse(this.state.ballX, this.state.ballY, size, size);
 	}
 	
 	/**
@@ -39,8 +43,13 @@ export default class BallSketch extends Sketch {
 	onBeat({tempo, count, beatDuration}) {
 		if (tempo === 'four') {
 			TweenLite.to(this.state, beatDuration() / 1000, {
-				ballX: count % 2 === 0 ? window.innerWidth/2 : 0,
+				ballX: count % 2 === 0 ? width/4 : -width/4,
 			});
+			if (count % 2 == 0) {
+				TweenLite.to(this.state, beatDuration() / 1000, {
+					ballY: this.state.ballY < 0 ? height/4 : -height/4
+				})
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@ export class BeatController extends EventEmitter {
 	 * and listens for an update event on the socket
 	 */
 	setup() {
-		this.bpm = 105;
+		this.bpm = 140;
 		this.startTime = Date.now()
 		this.tempos =  {
 			four: {
@@ -72,12 +72,8 @@ export class BeatController extends EventEmitter {
 	 * @param {Number} bpm: the new BPM
 	 * @param {Boolean} emitSyncEvent: set to true if we want to emit a BPM sync event on the socket
 	 */
-	setBPM( bpm, emitSyncEvent ) {
+	setBPM( bpm ) {
 		this.bpm = bpm;
-		Object.keys(this.tempos).forEach(key => {
-			this.tempos[key].count = 0
-		})
-		if (emitSyncEvent) this.sync()
 	}
 
 	sync() {

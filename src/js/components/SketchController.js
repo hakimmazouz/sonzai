@@ -1,4 +1,5 @@
 import p5 from 'p5'
+import 'p5/lib/addons/p5.sound';
 import Sketches from './sketches'
 import $events from './../mojo/EventEmitter'
 import $bpm from './BeatController'
@@ -20,11 +21,17 @@ export default class SketchController {
 		window.setup = this.setup;
 		this.draw = this.draw.bind(this)
 		window.draw = this.draw;
+		this.keyPressed = this.keyPressed.bind(this);
+		window.keyPressed = this.keyPressed.bind(this);
 		this.p5 = new p5()
 	}
 
 	setup() {
 		if (this.isHost) {
+			this.mic = new p5.AudioIn();
+			this.mic.start();
+			this.fft = new p5.FFT(0.5, 1024);
+			this.fft.setInput(this.mic)
 			$events.on('SPACEBAR', () => $bpm.sync())
 			$midi.on('bpm-update', value => {
 				$bpm.setBPM(value, true);
@@ -36,7 +43,21 @@ export default class SketchController {
 
 	draw() {
 		$bpm.update()
+		// const spectrum = this.fft.analyze();
+		// const energy = this.fft.getEnergy('bass');
 		this.currentSketch.draw($bpm);
+
+		// beginShape();
+		// for (var i = 0; i< spectrum.length; i++){
+		// 	var x = map(i, 0, spectrum.length, 0, width);
+		// 	var h = -height + map(spectrum[i], 0, 255, height, 0);
+		// 	rect(x - width/2, height, width / spectrum.length, h )
+		// }		
+		// endShape()
+	}
+
+	keyPressed() {
+		this.currentSketch.keyPressed()
 	}
 
 	changeSketch(name) {
