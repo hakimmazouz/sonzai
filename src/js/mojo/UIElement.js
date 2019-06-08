@@ -1,4 +1,4 @@
-import { EventEmitter } from './../../mojo/EventEmitter';
+import { EventEmitter } from './EventEmitter';
 
 export default class UIElement extends EventEmitter {
 	constructor($container) {
