@@ -8,10 +8,6 @@ export default class UIElement extends EventEmitter {
 
 		this.setupElement();
 	}
-
-	setupElement() {
-		//setupElement
-	}
 	
 	onChange(callback, event) {
 		if (event) {
