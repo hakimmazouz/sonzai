@@ -27,7 +27,7 @@ export default class BallSketch extends Sketch {
 		const ballAlpha = map(progress, 0, 1, 100, 0);
 
 		translate(width/2, height/2)
-		background(50);
+		background(50, 10);
 		noStroke()
 		fill(255, ballAlpha);
 		ellipse(this.state.ballX, this.state.ballY, size*2, size*2);
@@ -46,7 +46,7 @@ export default class BallSketch extends Sketch {
 				ballX: count % 2 === 0 ? width/4 : -width/4,
 			});
 			if (count % 2 == 0) {
-				TweenLite.to(this.state, beatDuration() / 1000, {
+				TweenLite.to(this.state, beatDuration()/1.5 / 1000, {
 					ballY: this.state.ballY < 0 ? height/4 : -height/4
 				})
 			}

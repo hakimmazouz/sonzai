@@ -24,3 +24,7 @@ export function constrain(value, min, max) {
 export function mapConstrain(value, minX, maxX, minY, maxY) {
 	return constrain(map(...arguments), minY, maxY);
 }
+
+export function withinRange(value, min, max) {
+	return value >= min && value <= max ? value : false
+}

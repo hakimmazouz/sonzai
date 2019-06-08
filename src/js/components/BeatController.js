@@ -1,10 +1,12 @@
 import {EventEmitter} from '../mojo/EventEmitter'
 import $io from '../Sockets'
 import { mapConstrain } from '../mojo/Helpers';
+import $midi from '../mojo/MIDI';
 
 export class BeatController extends EventEmitter {
 	constructor() {
 		super();
+		this.isHost = window.location.hostname.includes('localhost');
 		this.setup();
 	}
 
@@ -35,7 +37,11 @@ export class BeatController extends EventEmitter {
 				beatDuration: () => this.getBaseTempo() * 0.25
 			}
 		}
-		if (!window.location.hostname.includes('localhost')) $io.onBPMUpdate(this.dataReceived.bind(this))
+		if (this.isHost) {
+			this.attachHostEventHandlers();
+		} else {
+			$io.onBPMUpdate(this.dataReceived.bind(this))
+		}
 	}
 
 	/**
@@ -97,5 +103,27 @@ export class BeatController extends EventEmitter {
 		this.emit('beat', {tempo: key, ...this.tempos[key]});
 		this.emit(key, this.tempos[key]);
 	}
+
+	attachHostEventHandlers() {
+		$midi.on('bpm-update', (bpm) => {
+			this.setBPM(bpm)
+			this.emit('bpm-change', this.bpm)
+		})
+		$midi.on('bpm-half', ({status}) => {
+			if (status === 'on') {
+				this.bpm = Math.max(50, Math.round(this.bpm/2))
+				this.emit('bpm-change', this.bpm);
+				this.sync()
+			}
+		})
+		$midi.on('bpm-double', ({status}) => {
+			if (status === 'on') {
+				console.log(status)
+				this.bpm = Math.min(180, Math.round(this.bpm*2))
+				this.emit('bpm-change', this.bpm);
+				this.sync()
+			}
+		})
+ 	}
 }
 export default new BeatController()

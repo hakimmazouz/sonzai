@@ -17,12 +17,18 @@ export default class SketchController {
 
 	init() {
 		this.changeSketch('BallSketch')
+
 		this.setup = this.setup.bind(this)
 		window.setup = this.setup;
+
 		this.draw = this.draw.bind(this)
 		window.draw = this.draw;
+
 		this.keyPressed = this.keyPressed.bind(this);
 		window.keyPressed = this.keyPressed.bind(this);
+
+		window,addEventListener('resize', () => resizeCanvas(window.innerWidth, window.innerHeight))
+
 		this.p5 = new p5()
 	}
 
@@ -36,8 +42,9 @@ export default class SketchController {
 			$midi.on('bpm-update', value => {
 				$bpm.setBPM(value, true);
 			})
+			$midi.on('key-up', () => this.changeSketch(this.currentSketch instanceof Sketches.BallSketch ? 'Landscape' : 'BallSketch'))
 		}
-		$bpm.once('beat', e => console.log('once only', e))
+		$bpm.on('beat', this.onBeat.bind(this));
 		createCanvas(window.innerWidth, window.innerHeight)
 	}
 
@@ -58,6 +65,10 @@ export default class SketchController {
 
 	keyPressed() {
 		this.currentSketch.keyPressed()
+	}
+
+	onBeat(beat) {
+		this.currentSketch.onBeat(beat)
 	}
 
 	changeSketch(name) {
