@@ -8,7 +8,7 @@ export class UIManager {
 	constructor() {
 		this.setupSections();
 
-		if (window.location.hostname.includes('localhost')) {
+		if (IS_HOST) {
 			this.mount()
 			$midi.on('connected', this.onNewDevice.bind(this));
 		}
@@ -19,29 +19,7 @@ export class UIManager {
 		document.body.appendChild(this.$el)
 
 		this.notifications = new NotificationManager();
-	}
-
-	createElement() {
-		const el = document.createElement('div');
-		el.id = 'ui-layer'
-
-		this.$knob = document.createElement('div');
-		this.$knob.classList.add('knob');
-		el.appendChild(this.$knob)
-
-		this.$bpm = document.createElement('div');
-		this.$bpm.classList.add('bpm');
-		this.$bpm.innerHTML = `${$bpm.bpm}<br><span>BPM</span>`;
-		el.appendChild(this.$bpm)
-
-		return el;
-	}
-
-	onBPMUpdate(value) {
-		console.log(value)
-		this.$bpm.innerHTML = `${value}<br><span>BPM</span>`;
-		const rotation = map(value, 50, 180, -140, 140);
-		this.$knob.style.transform = `rotate(${rotation}deg)`
+		this.setupSections();
 	}
 
 	onNewDevice(name) {

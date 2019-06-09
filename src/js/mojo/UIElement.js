@@ -1,10 +1,29 @@
 import { EventEmitter } from './EventEmitter';
 
 export default class UIElement extends EventEmitter {
-	constructor($container) {
+	constructor($container, handlers = {}) {
+		if (!$container || typeof $container !== 'HTMLElement') throw 'UIElement: An HTMLElement is required as a container.'
 		super();
 		this.$container = $container;
+		this.handlers = handlers;
 		this.$el = document.createElement('div');
+		this.state = new Proxy({value: this.initial}, {
+			set: (state, prop, newValue) => {
+				if (state[prop] !== newValue) {
+					state[prop] = newValue; 
+
+					if (prop === 'value') {
+						if (this.render) this.render();
+						this.emit('change', newValue);
+						this.emit(`change:${prop}`, newValue);
+					} else {
+						this.emit('stateChange', newValue);
+						this.emit(`stateChange:${prop}`, newValue);
+					}
+				}
+				return true;
+			}
+		});
 
 		this.setupElement();
 	}

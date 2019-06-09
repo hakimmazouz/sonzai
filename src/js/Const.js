@@ -15,3 +15,7 @@ export const SOCKET_EVENTS = {
 export const EVENTS = {
 	
 }
+
+export const ENV = {
+	IS_HOST: window.location.hostname.includes('localhost')
+}
