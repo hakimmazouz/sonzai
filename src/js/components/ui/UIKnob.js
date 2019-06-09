@@ -1,28 +1,32 @@
-import UIElement from "../../mojo/UIElement";
 import $keyboard from "../../mojo/Keyboard";
 import {map, constrain} from '../../mojo/Helpers'
+import UIControl from "../../mojo/ui/UIControl";
 
-export default class UIKnob extends UIElement {
-	constructor($container, handlers = {}, {keys: {increment, decrement}, label = 'Knob', initial = 135, max = 180, min = 45, incrementBy = 1}) {
-		this.max = max;
-		this.min = min;
-		this.initial = initial;
-		this.state.value = initial;
+export default class UIKnob extends UIControl {
+	constructor($container, setupHandlers, {keys: {increment, decrement}, label = 'UIKnob', initial = 135, max = 180, min = 45, incrementBy = 1}) {
+		super($container, setupHandlers, initial);
+		this.state = {
+			max,
+			min,
+			value: initial,
+		}
 		this.label = label;
 		this.upKey = increment;
 		this.downKey = decrement;
 		this.incrementValue = incrementBy;
-
-		super($container, handlers);
+		super.setupState();
+		this.setupElement();
+		this.setupHandlers();
+		this.mount();
 	}
 
-	render() {
+	setupElement() {
+		this.$el.classList.add('ui--knob')
 		this.createKnob();
-		this.createLabel();
+		this.createValueLabel();
 		this.createTagLabel();
-		this.set(this.value)
-
-		this.attachHandlers();
+		console.log(this.state)
+		this.render(this.state);
 	}
 
 	createKnob() {
@@ -32,29 +36,32 @@ export default class UIKnob extends UIElement {
 	}
 
 	createValueLabel() {
-		this.$value = document.createElement('h3');
-		this.$value.contentEditable = true;
+		this.$value = document.createElement('input');
+		this.$value.type = 'text';
 		this.$value.classList.add('label');
-		this.$value.innerText = this.value;
+		this.$el.appendChild(this.$value)
 	}
 
 	createTagLabel() {
 		this.$tag = document.createElement('h4');
 		this.$tag.classList.add('tag');
 		this.$tag.innerText = this.label;
+		this.$el.appendChild(this.$tag)
 	}
 
-	render() {
-		this.$value.innerText = this.value;
-		this.$knob.style.transform = `rotate(${map(this.value, this.min, this.max, -140, 140)}deg)`
+	render({value, min, max}) {
+		this.$value.value = value;
+		this.$knob.style.transform = `rotate(${map(value, min, max, -140, 140)}deg)`
 	}
 
-	attachHandlers() {
+	setupHandlers() {
 		$keyboard.on(this.upKey, () => {
-			this.state.value = constrain(this.value + incrementValue, this.min, this.max)
+			console.log(this.state)
+			this.handleChange(constrain(this.state.value + this.incrementValue, this.state.min, this.state.max))
 		})
 		$keyboard.on(this.downKey, () => {
-			this.state.value = constrain(this.value - incrementValue, this.min, this.max)
+			this.handleChange(constrain(this.state.value - this.incrementValue, this.state.min, this.state.max))
 		})
+		this.$value.addEventListener('input', e => this.handleChange(e.target.value))
 	}
 }

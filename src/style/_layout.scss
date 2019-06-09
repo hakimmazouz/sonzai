@@ -56,39 +56,61 @@ body {
 		}
 	}
 
-	#ui-layer {
+	.ui--main {
 		color: white;
 		position: fixed;
 		top: 30px;
 		left: 30px;
-		border-radius: 5px;
-		background-color: #111111;
-		padding: 15px;
 		text-align: center;
-		.bpm {
-			margin-top: 10px;
-			text-align: center;
-			span {
-				font-size: 12px;
-				opacity: 0.5;
-				display: block;
-				margin-bottom: 0;
+		display: flex;
+		.ui--section {
+			position: fixed;
+			left: 0;
+			display: flex;
+			&--top {
+				top: 0;
+			}
+			&--bottom {
+				bottom: 0;
 			}
 		}
-		.knob {
-			border: 2px solid white;
-			width: 60px;
-			height: 60px;
-			position: relative;
-			border-radius: 100%;
-			&:after {
-				content: '';
-				position: absolute;
-				height: 50%;
-				width: 2px;
-				top: 0;
-				left: calc(50% - 1px);
-				background-color: goldenrod;
+		.ui--knob {
+			width: 90px;
+			padding: 15px;
+			margin: 10px;
+			border-radius: 5px;
+			background-color: #111111;
+			.knob {
+				border: 1px solid white;
+				width: 60px;
+				height: 60px;
+				position: relative;
+				border-radius: 100%;
+				transition: transform .15s ease-out;
+				&:after {
+					content: '';
+					position: absolute;
+					height: 50%;
+					width: 2px;
+					top: 0;
+					left: calc(50% - 1px);
+					background-color: goldenrod;
+				}
+			}
+			.label {
+				font-family: $font-family--primary;
+				margin-top: 10px;
+				text-align: center;
+				font-size: 16px;
+				max-width: 100%;;
+				background: transparent;
+				border: none;
+				color: white;
+			}
+			.tag {
+				font-size: 12px;
+				opacity: 0.5;
+				margin-bottom: 0;
 			}
 		}
 	}

@@ -1,19 +1,22 @@
-import $events from './EventEmitter'
+import { EventEmitter } from './EventEmitter'
 
-export const KEYCODES = {
-	SPACEBAR: 32,
-	ARROW_LEFT: 37,
-	ARROW_RIGHT: 39,
-	ARROW_UP: 38,
-	ARROW_DOWN: 40,
-	ENTER: 13,
-	TAB: 9,
-	ESCAPE: 27
-}
+export class Keyboard extends EventEmitter {
+	constructor(immediate) {
+		super();
+		this.onKeyDown = this.onKeyDown.bind(this)
+		if (immediate) this.enable();
+	}
 
-function onKeyUp({keyCode}) {
-	Object.values(KEYCODES).map(function (key, index) {
-		if (keyCode === key) $events.emit(Object.keys(KEYCODES)[index])
-	})
+	onKeyDown({keyCode}) {
+		this.emit(keyCode)
+	}
+
+	enable() {
+		window.addEventListener('keydown', this.onKeyDown)
+	}
+	
+	disable() {
+		window.removeEventListener('keydown', this.onKeyDown)
+	}
 }
-window.addEventListener('keyup', onKeyUp);
+export default new Keyboard(true);

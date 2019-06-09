@@ -1,24 +1,25 @@
-import $bpm from './../components/BeatController'
-import { map } from '../mojo/Helpers';
+import $beat from './../components/BeatController'
+import UIElement from '../mojo/ui/UIElement';
 import $midi from './../mojo/MIDI'
-import {IS_HOST} from './../Const'
+import $events from './../mojo/EventEmitter'
+import {KEY_EVENTS} from './../Const'
 import NotificationManager from './../components/NotificationManager'
+import UIKnob from '../components/ui/UIKnob';
 
-export class UIManager {
-	constructor() {
-		this.setupSections();
-
-		if (IS_HOST) {
-			this.mount()
-			$midi.on('connected', this.onNewDevice.bind(this));
-		}
+export class UIManager extends UIElement {
+	constructor($container) {
+		super($container)
+		this.mount()
+		$midi.on('connected', this.onNewDevice.bind(this));
 	}
 
 	mount() {
-		this.$el = this.createElement();
-		document.body.appendChild(this.$el)
+		this.$el = document.createElement('div');
+		this.$el.classList.add('ui--main')
+		this.$container.appendChild(this.$el);
 
 		this.notifications = new NotificationManager();
+		this.setupUIHandlers();
 		this.setupSections();
 	}
 
@@ -29,31 +30,50 @@ export class UIManager {
 	setupSections() {
 		this.sections = {
 			top: {
-				bpm: {
-					ctrl: {},
-					attachHandlers: function($ui) {
-						$bpm.on('bpm-change', this.onBPMUpdate.bind(this));
-						this.on('change', $ui.handlers.onBpmChange)
-					}
-				},
-				masterTempo: {
-					ctrl: {},
-					attachHandlers: function($ui) {
-						this.on('change', $ui.handlers.onTempoChange)
-					}
-				}
+				bpm: new UIKnob(this.$el, ($bpmKnob) => {
+					$beat.on('bpm-change', bpm => this.state.value = bpm);
+					$bpmKnob.subscribe(value => $events.emit('ui:bpm-change', value));
+				}, {
+					min: 45,
+					max: 180,
+					keys: {
+						increment: KEY_EVENTS.ARROW_UP,
+						decrement: KEY_EVENTS.ARROW_DOWN
+					},
+					initial: 135,
+					label: 'BPM'
+				}),
+				maxTempo: new UIKnob(this.$el, ($bpmKnob) => {
+					// $beat.on('bpm-change', bpm => this.state.value = bpm);
+					// $bpmKnob.subscribe(value => $events.emit('ui:bpm-change', value));
+				}, {
+					min: 0,
+					max: 4,
+					keys: {
+						increment: KEY_EVENTS.ARROW_RIGHT,
+						decrement: KEY_EVENTS.ARROW_LEFT
+					},
+					initial: 2,
+					label: 'TEMPO'
+				})
+				// masterTempo: {
+				// 	ctrl: new UISlider(),
+				// 	attachHandlers: function($ui) {
+				// 		this.subscribe($ui.handlers.onTempoChange)
+				// 	}
+				// }
 			},
-			bottom: {
-				sketchPicker: {
-					ctrl: {},
-					attachHandlers: function($ui) {
-						this.on('sketch-change', $ui.handlers.onSketchPicked)
-					}
-				}
-			}
+			// bottom: {
+			// 	sketchPicker: {
+			// 		ctrl: new UICollapsibleSelect(),
+			// 		attachHandlers: function($ui) {
+			// 			this.subscribe($ui.handlers.onSketchPicked)
+			// 		}
+			// 	}
+			// }
 		}
 
-		this.setupEventHandlers();
+		// this.setupEventHandlers();
 	}
 
 	setupEventHandlers() {
@@ -67,11 +87,18 @@ export class UIManager {
 
 	setupUIHandlers() {
 		this.handlers = {
-			onBpmChange: bpm => this.emit('bpm-change', bpm),
+			onBpmChange: bpm => {
+				//this.emit('bpm-change', bpm)
+				console.log(this)
+			},
 			onTempoChange: tempo => this.emit('tempo-change', tempo),
 			onSketchChange: sketch => this.emit('sketch-change', sketch),
+		}
+
+		for (var key in this.handlers) {
+			this.handlers[key] = this.handlers[key].bind(this)
 		}
 	}
 }
 
-export default new UIManager()
+export default new UIManager(document.body)

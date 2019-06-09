@@ -2,6 +2,7 @@ import {EventEmitter} from '../mojo/EventEmitter'
 import $io from '../Sockets'
 import { mapConstrain } from '../mojo/Helpers';
 import $midi from '../mojo/MIDI';
+import $events from '../mojo/EventEmitter'
 
 export class BeatController extends EventEmitter {
 	constructor() {
@@ -123,6 +124,10 @@ export class BeatController extends EventEmitter {
 				this.emit('bpm-change', this.bpm);
 				this.sync()
 			}
+		})
+
+		$events.on('ui:bpm-change', value => {
+			this.bpm = value;
 		})
  	}
 }

@@ -19,3 +19,14 @@ export const EVENTS = {
 export const ENV = {
 	IS_HOST: window.location.hostname.includes('localhost')
 }
+
+export const KEY_EVENTS = {
+	SPACEBAR: 32,
+	ARROW_LEFT: 37,
+	ARROW_RIGHT: 39,
+	ARROW_UP: 38,
+	ARROW_DOWN: 40,
+	ENTER: 13,
+	TAB: 9,
+	ESCAPE: 27
+}

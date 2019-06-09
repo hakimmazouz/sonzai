@@ -3,7 +3,9 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const WebpackDashboardPlugin = require('webpack-dashboard/plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const WebpackNotifierPlugin = require('webpack-notifier');
+
 
 
 module.exports = {
@@ -35,6 +37,10 @@ module.exports = {
 		}
 	},
 	plugins: [
+		new WebpackNotifierPlugin({
+			title: 'Sonzai Dev',
+			contentImage: path.join(__dirname, 'logo.png')
+		}),
 		new CleanWebpackPlugin(['dist']),
 		new WebpackDashboardPlugin(),
 		new HtmlWebpackPlugin({
