@@ -10,7 +10,7 @@ export default class UISelect extends UIControl {
 	constructor($container, setupExternalHandlers, {
 		options = ['First option', 'second option'],
 		initial = 0,
-		keys = {next: 'o', prev: 'p'},
+		keyRange = KEY_EVENTS.NUMBER_ROW,
 		tag = 'Select element',
 	}) {
 		super($container, setupExternalHandlers)
@@ -21,6 +21,7 @@ export default class UISelect extends UIControl {
 			tag,
 			options
 		}
+		this.keyRange = keyRange;
 
 		this.setupState();
 		this.setupElement();
@@ -65,17 +66,6 @@ export default class UISelect extends UIControl {
 	}
 
 	expand() {
-		// TweenMax.set(this.$content, {
-		// 	height: 'auto',
-		// 	onComplete: () => {
-		// 		TweenMax.from(this.$content, 5, {
-		// 			height: this.$options[0].offsetHeight,
-		// 			onComplete: () => {
-		// 				this.state.expanded = true
-		// 			}
-		// 		})
-		// 	}
-		// })
 
 		TweenMax.to(this.$content, 0.25, {
 			height: this.$content.scrollHeight,
@@ -110,9 +100,9 @@ export default class UISelect extends UIControl {
 	}
 
 	setupHandlers() {
-		// $keyboard.onRange(KEY_EVENTS.NUMBER_ROW, (value) => {
-		// 	this.handleChange(this.state.options[value-1]);
-		// })
+		$keyboard.onRange(this.keyRange, (value) => {
+			this.handleChange(constrain(value, 0, this.state.options.length));
+		})
 
 		this.$el.addEventListener('mouseenter', event => {
 			if (!this.state.expanded) this.expand()

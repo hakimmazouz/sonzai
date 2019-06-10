@@ -41,7 +41,7 @@ export const KEY_EVENTS = {
 	ENTER: 13,
 	TAB: 9,
 	ESCAPE: 27,
-	NUMBER_ROW: [1,9]
+	NUMBER_ROW: [49,57]
 }
 
 export const TEMPO_CONFIG = {

@@ -1,4 +1,5 @@
 import { EventEmitter } from './EventEmitter'
+import {withinRange} from './Helpers'
 
 export class Keyboard extends EventEmitter {
 	constructor(immediate) {
@@ -18,6 +19,19 @@ export class Keyboard extends EventEmitter {
 		this.emit(keyCode)
 		this.emit(`keyup:${key}`);
 		this.emit(`keyup:${keyCode}`);
+
+		Object.keys(this.events).forEach(event => {
+			if (event.includes('range')) {
+				const range = event.split(':')
+				range.shift();
+
+				console.log(keyCode - range[0], this.events[event])
+				if (withinRange(keyCode, Number(range[0]), Number(range[1]))) {
+					console.log(keyCode, range[0], (keyCode - range[0]) + 1, this.events[event])
+					this.events[event].forEach(callback => callback(keyCode - range[0]));
+				}
+			}
+		})
 	}
 
 	press(key, callback) {
@@ -26,6 +40,10 @@ export class Keyboard extends EventEmitter {
 
 	release(key, callback) {
 		this.on(`keyup:${key}`, callback);
+	}
+
+	onRange(range, callback) {
+		this.on(`range:${range[0]}:${range[1]}`, callback);
 	}
 
 	enable() {
