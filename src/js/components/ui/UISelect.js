@@ -3,6 +3,7 @@ import $events from '@mojo/EventEmitter'
 import $keyboard from '@mojo/Keyboard'
 import ScrollToPlugin from "gsap/ScrollToPlugin";﻿
 import {EVENTS, KEY_EVENTS} from '@/Const'
+import {constrain} from '@mojo/Helpers'
 
 (ScrollToPlugin)
 
@@ -66,14 +67,12 @@ export default class UISelect extends UIControl {
 	}
 
 	expand() {
-
 		TweenMax.to(this.$content, 0.25, {
 			height: this.$content.scrollHeight,
 			onComplete: () => {
 				this.state.expanded = true
 			}
 		})
-
 	}
 
 	collapse() {
@@ -101,7 +100,8 @@ export default class UISelect extends UIControl {
 
 	setupHandlers() {
 		$keyboard.onRange(this.keyRange, (value) => {
-			this.handleChange(constrain(value, 0, this.state.options.length));
+			console.log(constrain(value, 0, this.state.options.length))
+			this.handleChange(constrain(value, 0, this.state.options.length-1));
 		})
 
 		this.$el.addEventListener('mouseenter', event => {

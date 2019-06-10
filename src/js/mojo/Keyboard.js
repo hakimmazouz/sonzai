@@ -6,6 +6,7 @@ export class Keyboard extends EventEmitter {
 		super();
 		this.onKeyDown = this.onKeyDown.bind(this)
 		this.onKeyUp = this.onKeyUp.bind(this)
+		this.rangeEnabled = true;
 		if (immediate) this.enable();
 	}
 
@@ -20,6 +21,7 @@ export class Keyboard extends EventEmitter {
 		this.emit(`keyup:${key}`);
 		this.emit(`keyup:${keyCode}`);
 
+		if (!this.rangeEnabled) return
 		Object.keys(this.events).forEach(event => {
 			if (event.includes('range')) {
 				const range = event.split(':')
@@ -44,6 +46,14 @@ export class Keyboard extends EventEmitter {
 
 	onRange(range, callback) {
 		this.on(`range:${range[0]}:${range[1]}`, callback);
+	}
+
+	disableRange() {
+		this.rangeEnabled = false;
+	}
+
+	enableRange() {
+		this.rangeEnabled = true;
 	}
 
 	enable() {

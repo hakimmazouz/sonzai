@@ -1,5 +1,6 @@
 import $keyboard from "@mojo/Keyboard";
 import {map, constrain} from '@mojo/Helpers'
+import {KEY_EVENTS} from '@/Const'
 import UIControl from "@mojo/ui/UIControl";
 
 
@@ -78,6 +79,7 @@ export default class UIKnob extends UIControl {
 	 * @return {void}
 	 */
 	render({value, min, max}) {
+		console.log($keyboard.rangeEnabled)
 		this.$value.value = value;
 		this.$knob.style.transform = `rotate(${map(value, min, max, -140, 140)}deg)`
 	}
@@ -100,6 +102,13 @@ export default class UIKnob extends UIControl {
 			this.$value.focus();
 			this.$value.select();
 		})
+		$keyboard.release(KEY_EVENTS.ENTER, () => {
+			if (this.$value === document.activeElement) {
+				this.$value.blur()
+			};
+		})
 		this.$value.addEventListener('input', e => this.handleChange(e.target.value))
+		this.$value.addEventListener('focus', e => $keyboard.disableRange())
+		this.$value.addEventListener('blur', e => $keyboard.enableRange())
 	}
 }
