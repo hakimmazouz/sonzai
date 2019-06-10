@@ -1,5 +1,7 @@
 import io from 'socket.io-client'
-import $bpm from './components/BeatController'
+import $beat from '@/components/BeatController'
+import {ENV, EVENTS} from '@/Const'
+const {SOCKET} = EVENTS;
 
 export class SocketsController {
 	constructor() {
@@ -7,29 +9,36 @@ export class SocketsController {
 		this._registerHandlers()
 	}
 
-	broadcastState(state) {
-		this.socket.emit('host-update', state)
+	updateBPM(state) {
+		this.socket.emit(SOCKET.BPM_CHANGE, state);
+	}
+	onBPMChange(callback) {
+		this.socket.on(SOCKET.BPM_CHANGE, callback)
 	}
 
-	syncBPM(state) {
-		this.socket.emit('sync-bpm', state)
+	updateMasterTempo(state) {
+		this.socket.emit(SOCKET.MASTER_TEMPO_CHANGE, state);
+	}
+	onMasterTempoChange(callback) {
+		this.socket.on(SOCKET.MASTER_TEMPO_CHANGE, callback)
 	}
 
-	onBPMUpdate(callback) {
-		this.socket.on('bpm-update', callback)
+	changeSketch(newIndex) {
+		this.socket.emit(SOCKET.SKETCH_CHANGE, newIndex);
 	}
-
-	onHostUpdated(callback) {
-		this.socket.on('host-updated', callback)
+	onSketchChange(callback) {
+		this.socket.on(SOCKET.SKETCH_CHANGE, callback)
 	}
 
 	_onSlaveConnected() {
-		if (window.location.hostname.includes('localhost')) $bpm.setBPM($bpm.bpm, true)
+		if (ENV.IS_HOST) {
+			$beat.setBPM($beat.bpm, true)
+			$beat.setMasterTempo($beat.tempos.master);
+		}
 	}
 
 	_registerHandlers() {
-		this.socket.on('connect', () => console.log('connected to server'))
-		if (window.location.hostname.includes('localhost')) this.socket.on('slave-connected', this._onSlaveConnected.bind(this))
+		if (ENV.IS_HOST) this.socket.on(SOCKET.SLAVE_CONNECTED, this._onSlaveConnected.bind(this))
 	}
 }
 

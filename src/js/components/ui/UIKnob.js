@@ -1,9 +1,10 @@
-import $keyboard from "../../mojo/Keyboard";
-import {map, constrain} from '../../mojo/Helpers'
-import UIControl from "../../mojo/ui/UIControl";
+import $keyboard from "@mojo/Keyboard";
+import {map, constrain} from '@mojo/Helpers'
+import UIControl from "@mojo/ui/UIControl";
+
 
 export default class UIKnob extends UIControl {
-	constructor($container, setupHandlers, {keys: {increment, decrement}, label = 'UIKnob', initial = 135, max = 180, min = 45, incrementBy = 1}) {
+	constructor($container, setupHandlers, {keys: {focus, increment, decrement}, label = 'UIKnob', initial = 135, max = 180, min = 45, incrementBy = 1}) {
 		super($container, setupHandlers, initial);
 		this.state = {
 			max,
@@ -13,28 +14,44 @@ export default class UIKnob extends UIControl {
 		this.label = label;
 		this.upKey = increment;
 		this.downKey = decrement;
+		this.focusKey = focus;
 		this.incrementValue = incrementBy;
+
 		super.setupState();
 		this.setupElement();
 		this.setupHandlers();
 		this.mount();
 	}
 
+	/**
+	 * Sets up the dom elements in the knob 
+	 * and renders the view with values
+	 * @return {void}
+	 */
 	setupElement() {
 		this.$el.classList.add('ui--knob')
 		this.createKnob();
 		this.createValueLabel();
 		this.createTagLabel();
-		console.log(this.state)
 		this.render(this.state);
 	}
 
+	/**
+	 * Creates the knob element in the knob-control.
+	 * 
+	 * @return {void}
+	 */
 	createKnob() {
 		this.$knob = document.createElement('div');
 		this.$knob.classList.add('knob');
 		this.$el.appendChild(this.$knob)
 	}
 
+	/**
+	 * Creates the input element which holds the current value.
+	 * 
+	 * @return {void}
+	 */
 	createValueLabel() {
 		this.$value = document.createElement('input');
 		this.$value.type = 'text';
@@ -42,6 +59,12 @@ export default class UIKnob extends UIControl {
 		this.$el.appendChild(this.$value)
 	}
 
+	/**
+	 * Creates the label that describes the current
+	 * data being changed.
+	 * 
+	 * @return {void}
+	 */
 	createTagLabel() {
 		this.$tag = document.createElement('h4');
 		this.$tag.classList.add('tag');
@@ -49,18 +72,33 @@ export default class UIKnob extends UIControl {
 		this.$el.appendChild(this.$tag)
 	}
 
+	/**
+	 * Renders the current state to the view.
+	 * 
+	 * @return {void}
+	 */
 	render({value, min, max}) {
 		this.$value.value = value;
 		this.$knob.style.transform = `rotate(${map(value, min, max, -140, 140)}deg)`
 	}
 
+	/**
+	 * Attaches the necessary handlers to the
+	 * events for changing the value.
+	 * 
+	 * @return {void}
+	 */
 	setupHandlers() {
-		$keyboard.on(this.upKey, () => {
+		$keyboard.press(this.upKey, () => {
 			console.log(this.state)
 			this.handleChange(constrain(this.state.value + this.incrementValue, this.state.min, this.state.max))
 		})
-		$keyboard.on(this.downKey, () => {
+		$keyboard.press(this.downKey, () => {
 			this.handleChange(constrain(this.state.value - this.incrementValue, this.state.min, this.state.max))
+		})
+		$keyboard.release(this.focusKey, () => {
+			this.$value.focus();
+			this.$value.select();
 		})
 		this.$value.addEventListener('input', e => this.handleChange(e.target.value))
 	}

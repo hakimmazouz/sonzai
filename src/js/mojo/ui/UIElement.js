@@ -1,4 +1,4 @@
-import { EventEmitter } from '../EventEmitter';
+import { EventEmitter } from '@mojo/EventEmitter';
 
 export default class UIElement extends EventEmitter {
 	constructor($container, setupExternalListeners) {

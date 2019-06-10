@@ -1,10 +1,11 @@
 import $beat from './../components/BeatController'
-import UIElement from '../mojo/ui/UIElement';
-import $midi from './../mojo/MIDI'
-import $events from './../mojo/EventEmitter'
-import {KEY_EVENTS} from './../Const'
-import NotificationManager from './../components/NotificationManager'
-import UIKnob from '../components/ui/UIKnob';
+import UIElement from '@mojo/ui/UIElement';
+import $midi from '@mojo/MIDI'
+import $events from '@mojo/EventEmitter'
+import {ENV, BPM, KEY_EVENTS} from '@/Const'
+import NotificationManager from '@/components/NotificationManager'
+import UIKnob from '@/components/ui/UIKnob';
+import Sketches from '@/components/sketches'
 
 export class UIManager extends UIElement {
 	constructor($container) {
@@ -34,27 +35,27 @@ export class UIManager extends UIElement {
 					$beat.on('bpm-change', bpm => this.state.value = bpm);
 					$bpmKnob.subscribe(value => $events.emit('ui:bpm-change', value));
 				}, {
-					min: 45,
-					max: 180,
+					min: BPM.MIN,
+					max: BPM.MAX,
 					keys: {
 						increment: KEY_EVENTS.ARROW_UP,
-						decrement: KEY_EVENTS.ARROW_DOWN
+						decrement: KEY_EVENTS.ARROW_DOWN,
+						focus: 'b'
 					},
-					initial: 135,
+					initial: $beat.bpm,
 					label: 'BPM'
 				}),
-				maxTempo: new UIKnob(this.$el, ($bpmKnob) => {
-					// $beat.on('bpm-change', bpm => this.state.value = bpm);
-					// $bpmKnob.subscribe(value => $events.emit('ui:bpm-change', value));
+				maxTempo: new UIKnob(this.$el, (knob) => {
+					knob.subscribe(value => $events.emit('ui:sketch-change', value));
 				}, {
 					min: 0,
-					max: 4,
+					max: Object.keys(Sketches).length - 1,
 					keys: {
 						increment: KEY_EVENTS.ARROW_RIGHT,
 						decrement: KEY_EVENTS.ARROW_LEFT
 					},
-					initial: 2,
-					label: 'TEMPO'
+					initial: 0,
+					label: 'SKETCH'
 				})
 				// masterTempo: {
 				// 	ctrl: new UISlider(),
@@ -87,10 +88,6 @@ export class UIManager extends UIElement {
 
 	setupUIHandlers() {
 		this.handlers = {
-			onBpmChange: bpm => {
-				//this.emit('bpm-change', bpm)
-				console.log(this)
-			},
 			onTempoChange: tempo => this.emit('tempo-change', tempo),
 			onSketchChange: sketch => this.emit('sketch-change', sketch),
 		}
@@ -101,4 +98,4 @@ export class UIManager extends UIElement {
 	}
 }
 
-export default new UIManager(document.body)
+export default ENV.IS_HOST ? new UIManager(document.body) : null

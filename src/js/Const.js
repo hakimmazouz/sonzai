@@ -5,19 +5,28 @@ export const BREAKPOINTS = {
 	XLARGE: 1600
 }
 
-export const SOCKET_EVENTS = {
-	HOST_UPDATE: 'host-update',
-	HOST_UPDATED: 'host-updated',
-	CONNECTED: 'connected',
-	UPDATE_SLAVES: 'update-slaves',
-}
-
 export const EVENTS = {
-	
+	UI: {
+		BPM_CHANGE: 'ui:bpm-change',
+		SKETCH_CHANGE: 'ui:sketch-change',
+		MASTER_TEMPO_CHANGE: 'ui:master-tempo-change',
+	},
+	SOCKET: {
+		SLAVE_CONNECTED: 'socket:slave-connected',
+		BPM_CHANGE: 'host:bpm-change',
+		BPM_SYNC: 'host:bpm-sync',
+		SKETCH_CHANGE: 'host:sketch-change',
+		MASTER_TEMPO_CHANGE: 'host:master-tempo-change'
+	},
 }
 
 export const ENV = {
 	IS_HOST: window.location.hostname.includes('localhost')
+}
+
+export const BPM = {
+	MIN: 35,
+	MAX: 180
 }
 
 export const KEY_EVENTS = {
@@ -30,3 +39,46 @@ export const KEY_EVENTS = {
 	TAB: 9,
 	ESCAPE: 27
 }
+
+export const TEMPO_CONFIG = {
+	two: {
+		progress: 0,
+		count: 0,
+		label: '1/2',
+		beatDuration: function() {
+			return  this.getBaseTempo() * 2
+		}
+	},
+	four: {
+		progress: 0,
+		count: 0,
+		label: '1/4',
+		beatDuration: function() {
+			return  this.getBaseTempo()
+		}
+	},
+	eight: {
+		progress: 0,
+		count: 0,
+		label: '1/8',
+		beatDuration: function() {
+			return  this.getBaseTempo() * 0.5
+		}
+	},
+	sixteen: {
+		progress: 0,
+		count: 0,
+		label: '1/16',
+		beatDuration: function() {
+			return  this.getBaseTempo() * 0.25
+		}
+	}
+}
+
+export const TEMPOS = function() {
+	const temposObject = {}
+	for (const key in TEMPO_CONFIG) {
+		temposObject[key.toUpperCase()] = key
+	}
+	return temposObject
+}();

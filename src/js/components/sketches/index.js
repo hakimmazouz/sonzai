@@ -1,7 +1,7 @@
 import BallSketch from './BallSketch'
-import Landscape from './Landscape'
+import TempoVisual from './TempoVisual'
 
 export default {
 	BallSketch,
-	Landscape
+	TempoVisual
 }

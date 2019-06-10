@@ -12,16 +12,10 @@ class SocketController {
 	}
 
 	_onConnection(socket) {
-		socket.on('host-update', (state) => this._hostUpdate(socket, state))
-		socket.on('sync-bpm', state => {
-			console.log(state)
-			socket.broadcast.emit('bpm-update', state)
-		})
-		this.io.emit('slave-connected', socket.id)
-	}
-
-	_hostUpdate(socket, state) {
-		socket.broadcast.emit('host-updated', state)
+		socket.on('host:master-tempo-change', state => socket.broadcast.emit('host:master-tempo-change', state))
+		socket.on('host:sketch-change', state => socket.broadcast.emit('host:sketch-change', state))
+		socket.on('host:bpm-change', state => socket.broadcast.emit('host:bpm-change', state))
+		this.io.emit('socket:slave-connected', socket.id)
 	}
 }
 

@@ -18,8 +18,8 @@ module.exports = {
 	resolve: {
 		alias: {
 			"three-examples": "three/examples/js",
-			"@mojo": path.resolve(__dirname, '../src/mojo'),
-			"@": path.resolve(__dirname, '../src')
+			"@mojo": path.resolve(__dirname, 'src/js/mojo'),
+			"@": path.resolve(__dirname, 'src/js')
 		}
 	},
 	devServer: {

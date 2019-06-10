@@ -1,8 +1,10 @@
-import {EventEmitter} from '../mojo/EventEmitter'
+import {EventEmitter} from '@mojo/EventEmitter'
 import $io from '../Sockets'
-import { mapConstrain } from '../mojo/Helpers';
-import $midi from '../mojo/MIDI';
-import $events from '../mojo/EventEmitter'
+import { mapConstrain } from '@mojo/Helpers';
+import $midi from '@mojo/MIDI';
+import $events from '@mojo/EventEmitter'
+import $keyboard from '@mojo/Keyboard'
+import {TEMPO_CONFIG, TEMPOS, ENV, EVENTS, KEY_EVENTS} from './../Const'
 
 export class BeatController extends EventEmitter {
 	constructor() {
@@ -16,32 +18,21 @@ export class BeatController extends EventEmitter {
 	 * and listens for an update event on the socket
 	 */
 	setup() {
-		this.bpm = 140;
+		this.bpm = 100;
 		this.startTime = Date.now()
 		this.tempos =  {
-			four: {
-				progress: 0,
-				modifier: 1,
-				count: 0,
-				beatDuration: () => this.getBaseTempo()
-			},
-			eight: {
-				progress: 0,
-				count: 0,
-				modifier: 2,
-				beatDuration: () => this.getBaseTempo() * 0.5
-			},
-			sixteen: {
-				progress: 0,
-				count: 0,
-				modifier: 4,
-				beatDuration: () => this.getBaseTempo() * 0.25
-			}
+			master: 'four',
+			...TEMPO_CONFIG
 		}
-		if (this.isHost) {
+		Object.keys(this.tempos).filter(k => k !== 'master').forEach(tempoKey => {
+			this.tempos[tempoKey].beatDuration = this.tempos[tempoKey].beatDuration.bind(this)
+		})
+
+		if (ENV.IS_HOST) {
 			this.attachHostEventHandlers();
 		} else {
-			$io.onBPMUpdate(this.dataReceived.bind(this))
+			$io.onBPMChange(this.dataReceived.bind(this))
+			$io.onMasterTempoChange(this.dataReceived.bind(this))
 		}
 	}
 
@@ -54,7 +45,7 @@ export class BeatController extends EventEmitter {
 		const elapsedTime = Date.now() - this.startTime;
 
 		for (const key in this.tempos) {
-			this.updateTempo(elapsedTime, key)
+			if (key !== 'master') this.updateTempo(elapsedTime, key)
 		}
 	}
 
@@ -83,14 +74,20 @@ export class BeatController extends EventEmitter {
 		this.bpm = bpm;
 	}
 
-	sync() {
-		this.startTime = Date.now();
-		$io.syncBPM({bpm: this.bpm, startTime: this.startTime})
+	setMasterTempo(tempo) {
+		this.tempos.master = tempo;
 	}
 
-	dataReceived({bpm, startTime}) {
+	sync() {
+		this.startTime = Date.now();
+		$io.updateBPM({bpm: this.bpm, startTime: this.startTime})
+	}
+
+	dataReceived({bpm = this.bpm, startTime = this.startTime, masterTempo = this.tempos.master}) {
+		console.log(bpm, startTime, masterTempo)
 		this.bpm = bpm;
 		this.startTime = startTime;
+		this.tempos.master = masterTempo
 	}
 
 	getBaseTempo() {
@@ -126,9 +123,16 @@ export class BeatController extends EventEmitter {
 			}
 		})
 
-		$events.on('ui:bpm-change', value => {
+		$events.on(EVENTS.UI.BPM_CHANGE, value => {
 			this.bpm = value;
+			$io.updateBPM(this.bpm)
 		})
+		$events.on(EVENTS.UI.MASTER_TEMPO_CHANGE, value => {
+			this.tempos.master = value;
+			$io.updateMasterTempo(this.masterTempoChange)
+		})
+
+		$keyboard.on(KEY_EVENTS.SPACEBAR, () => this.sync())
  	}
 }
 export default new BeatController()

@@ -3,11 +3,6 @@ import { TweenLite } from "gsap";
 
 export default class BallSketch extends Sketch {
 
-	/**
-	 * One time setup for the sketch, called by P5
-	 * 
-	 * @param {P5 Instance} p 
-	 */
 	setup(p) {
 		this.state = {
 			ballX: 0,
@@ -15,14 +10,8 @@ export default class BallSketch extends Sketch {
 		}
 	}
 
-	/**
-	 * Runs on each requestAnimationFrame call, called by P5
-	 * 
-	 * @param {p5 Instance} p: the current instance of the p5 sketch
-	 * @param {Function} updateSketch: calls updateSketch and broadcasts new sketch params to the server
-	 */
 	draw({tempos}) {
-		const {progress} = tempos['four'];
+		const {progress} = tempos[TEMPOS.FOUR];
 		const size = map(progress, 0, 1, 60, 30);
 		const ballAlpha = map(progress, 0, 1, 100, 0);
 
@@ -35,13 +24,8 @@ export default class BallSketch extends Sketch {
 		ellipse(this.state.ballX, this.state.ballY, size, size);
 	}
 	
-	/**
-	 * Runs every time a beat event is emitted from the BPMController
-	 * 
-	 * @param {BPMController Instance: state}  state.count
-	 */
 	onBeat({tempo, count, beatDuration}) {
-		if (tempo === 'four') {
+		if (tempo === TEMPOS.FOUR) {
 			TweenLite.to(this.state, beatDuration() / 1000, {
 				ballX: count % 2 === 0 ? width/4 : -width/4,
 			});

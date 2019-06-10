@@ -1,22 +1,36 @@
-import $events from './EventEmitter'
+import { EventEmitter } from './EventEmitter'
 
-class Mouse {
-	constructor(target) {
+export class Mouse extends EventEmitter {
+	constructor(target, immediate) {
+		super();
 		this.x = target.innerWidth / 2
 		this.y = target.innerHeight / 2
-		target.addEventListener('mousemove', this.updateMouse.bind(this))
+		this.onMouseMove = this.onMouseMove.bind(this);
+		this.target = target;
+
+		if (immediate) this.enable();
 	}
 
-	updateMouse({
-		clientX,
-		clientY
+	onMouseMove({
+		clientX: x,
+		clientY: y
 	}) {
-		this.x = clientX
-		this.y = clientY
-		$events.emit('mouse', {
-			x: this.x,
-			y: this.y
+		this.emit('mouse', {
+			lastX: this.x,
+			lastY: this.y,
+			x,
+			y
 		})
+		this.x = x
+		this.y = y
+	}
+
+	enable() {
+		this.target.addEventListener('mousemove', this.onMouseMove)
+	}
+
+	disable() {
+		this.target.removeEventListener('mousemove', this.onMouseMove)
 	}
 }
 
