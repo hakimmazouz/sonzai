@@ -19,8 +19,6 @@ export default class Sketch {
 		
 	}
 
-	onBeat({key, tempo, progress}) {
-		console.log('LOL')
-		
+	onBeat({tempo, beatDuration, count, progress}) {
 	}
 }

@@ -59,10 +59,13 @@ body {
 	.ui--main {
 		color: white;
 		position: fixed;
-		top: 30px;
-		left: 30px;
+		height: 100%;
+		width: 100%;
+		padding: 20px;
 		text-align: center;
 		display: flex;
+		align-items: flex-start;
+		z-index: 100;
 		.ui--section {
 			position: fixed;
 			left: 0;
@@ -74,14 +77,73 @@ body {
 				bottom: 0;
 			}
 		}
-		.ui--knob {
-			width: 90px;
-			padding: 15px;
+		.ui--control {
 			margin: 10px;
 			border-radius: 5px;
-			background-color: #111111;
+			padding: 15px 15px 30px;
+			background-color: transparentize($color--black, 0.15);
+			position: relative;
+			overflow: hidden;
+			&.ui--hidden {
+				display: none;
+			}
+			.tag {
+				font-size: 12px;
+				opacity: 0.5;
+				margin-bottom: 0;
+				position: absolute;
+				bottom: 15px;
+				left: 50%;
+				transform: translateX(-50%);
+				text-transform: uppercase;
+				white-space: nowrap;
+			}
+		}
+		.ui--select {
+			min-width: 300px;
+			position: absolute;
+			bottom: 20px;
+			padding-top: 5px;
+			.items {
+				padding: 0;
+				margin: 0;
+				height: 100%;
+				overflow-y: scroll;
+				padding-bottom: 15px;
+
+				.item {
+					text-transform: uppercase;
+					font-size: 16px;
+					line-height: 1;
+					list-style: none;
+					text-align: left;
+					padding: 10px 0;
+					opacity: 0.5;
+					transition: all .15s ease-in-out;
+					background-color: transparent;
+					&.selected {
+						opacity: 1;
+					}
+					&:hover {
+						background-color: transparentize($color--grey, 0.5);
+						&:not(.selected) {
+							cursor: pointer;
+						}
+					}
+				}
+			}
+			.tag {
+				left: 15px;
+				transform: none;
+			}
+		}
+		.ui--stepper {
+			min-width: 300px;
+		}
+		.ui--knob {
+			width: 90px;
 			.knob {
-				border: 1px solid white;
+				border: 2px solid transparentize($color--white, 0.25);
 				width: 60px;
 				height: 60px;
 				position: relative;
@@ -106,11 +168,6 @@ body {
 				background: transparent;
 				border: none;
 				color: white;
-			}
-			.tag {
-				font-size: 12px;
-				opacity: 0.5;
-				margin-bottom: 0;
 			}
 		}
 	}

@@ -30,10 +30,10 @@ export default class UIElement extends EventEmitter {
 	}
 
 	hide() {
-		this.$el.classList.addClass('ui--is-hidden')
+		this.$el.classList.add('ui--hidden')
 	}
 
 	show() {
-		this.$el.classList.removeClass('ui--is-hidden')
+		this.$el.classList.remove('ui--hidden')
 	}
 }

@@ -8,12 +8,14 @@ import $io from '@/Sockets'
 import $beat from './BeatController'
 import Sketches from './sketches'
 import {EVENTS, ENV} from '@/Const'
+import FadeShader from './FadeShader'
 const {UI} = EVENTS;
 
-export default class SketchController {
+export class SketchController {
 	constructor() {
 		this.sketches = Object.keys(Sketches).map(key => new Sketches[key]());
-		this.currentSketch = this.sketches[0]
+		this.currentSketch = this.sketches[0];
+		this.transitionProgress = 1.0;
 
 		this.init()
 	}
@@ -27,9 +29,6 @@ export default class SketchController {
 		this.draw = this.draw.bind(this)
 		window.draw = this.draw;
 
-		this.keyPressed = this.keyPressed.bind(this);
-		window.keyPressed = this.keyPressed.bind(this);
-
 		window.addEventListener('resize', () => resizeCanvas(window.innerWidth, window.innerHeight))
 
 		if (ENV.IS_HOST) {
@@ -40,11 +39,20 @@ export default class SketchController {
 		} else {
 			$io.onSketchChange(newIndex => this.changeSketch(newIndex))
 		}
+
+		$beat.on('beat', (beat) => {
+			const beatHandlers = this.onBeat(beat);
+
+			if (!beatHandlers) return
+			if (beatHandlers.hasOwnProperty(beat.tempo)) {
+				beatHandlers[beat.tempo]()
+			}
+		});
 	}
 
 	setup() {
-		$beat.on('beat', this.onBeat.bind(this));
 		createCanvas(window.innerWidth, window.innerHeight, WEBGL)
+		this.fadeShader = createShader(FadeShader.vert, FadeShader.frag);
 		this.currentSketch.setup();
 	}
 
@@ -54,16 +62,20 @@ export default class SketchController {
 		$beat.update()
 	}
 
-	keyPressed() {
-		this.currentSketch.keyPressed()
-	}
-
 	onBeat(beat) {
-		this.currentSketch.onBeat(beat)
+		return this.currentSketch.onBeat(beat)
 	}
 
 	changeSketch(index) {
 		this.currentSketch = this.sketches[index];
+		TweenMax.fromTo(this, 5, {
+			transitionProgress: 0,
+		},{
+			transitionProgress: 1,
+		})
 		this.currentSketch.setup();
+		$events.emit(EVENTS.SKETCH.SKETCH_CHANGE, index);
 	}
 }
+
+export default new SketchController()

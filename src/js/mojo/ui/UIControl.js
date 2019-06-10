@@ -3,6 +3,7 @@ import UIElement from "./UIElement";
 export default class UIControl extends UIElement {
 	constructor($container, handlers) {
 		super($container, handlers);
+		this.$el.classList.add('ui--control')
 	}
 
 	setupState() {
@@ -14,7 +15,7 @@ export default class UIControl extends UIElement {
 						if (typeof value !== typeof this.initial) {
 							throw `UIControl: Attempted to update value of type ${typeof this.initial} with a ${typeof newValue}`
 						}
-						if (this.$value && this.render) this.render(state);
+						if (this.render) this.render(state);
 					} else {
 						this.emit('stateChange', newValue);
 						this.emit(`stateChange:${prop}`, newValue);
@@ -26,7 +27,6 @@ export default class UIControl extends UIElement {
 	}
 
 	handleChange(value) {
-		console.log(value)
 		this.state.value = value;
 		this.emit(`change:value`, value);
 		this.emit('change', value);

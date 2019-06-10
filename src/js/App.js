@@ -1,6 +1,6 @@
 import $midi from '@mojo/MIDI';
-import SketchController from './components/SketchController';
-import $ui from './modules/UIManager';
+import $sketch from '@/components/SketchController';
+import $ui from '@/modules/UIManager';
 import {TEMPOS} from '@/Const'
 
 export default class App {
@@ -13,7 +13,7 @@ export default class App {
 	}
 
 	setup() {
-		this.sketchController = new SketchController(this.el)
+		this.sketchController = $sketch
 		this.ui = $ui;
 	}
 }

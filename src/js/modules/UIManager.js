@@ -2,9 +2,10 @@ import $beat from './../components/BeatController'
 import UIElement from '@mojo/ui/UIElement';
 import $midi from '@mojo/MIDI'
 import $events from '@mojo/EventEmitter'
-import {ENV, BPM, KEY_EVENTS} from '@/Const'
+import {ENV, EVENTS, BPM, KEY_EVENTS} from '@/Const'
 import NotificationManager from '@/components/NotificationManager'
 import UIKnob from '@/components/ui/UIKnob';
+import UISelect from '@/components/ui/UISelect'
 import Sketches from '@/components/sketches'
 
 export class UIManager extends UIElement {
@@ -32,8 +33,7 @@ export class UIManager extends UIElement {
 		this.sections = {
 			top: {
 				bpm: new UIKnob(this.$el, ($bpmKnob) => {
-					$beat.on('bpm-change', bpm => this.state.value = bpm);
-					$bpmKnob.subscribe(value => $events.emit('ui:bpm-change', value));
+					$bpmKnob.subscribe(value => $events.emit(EVENTS.UI.BPM_CHANGE, value));
 				}, {
 					min: BPM.MIN,
 					max: BPM.MAX,
@@ -46,7 +46,7 @@ export class UIManager extends UIElement {
 					label: 'BPM'
 				}),
 				maxTempo: new UIKnob(this.$el, (knob) => {
-					knob.subscribe(value => $events.emit('ui:sketch-change', value));
+					knob.subscribe(value => $events.emit(EVENTS.UI.SKETCH_CHANGE, value));
 				}, {
 					min: 0,
 					max: Object.keys(Sketches).length - 1,
@@ -64,14 +64,15 @@ export class UIManager extends UIElement {
 				// 	}
 				// }
 			},
-			// bottom: {
-			// 	sketchPicker: {
-			// 		ctrl: new UICollapsibleSelect(),
-			// 		attachHandlers: function($ui) {
-			// 			this.subscribe($ui.handlers.onSketchPicked)
-			// 		}
-			// 	}
-			// }
+			bottom: {
+				sketchPicker: new UISelect(this.$el, (select) => {
+					select.subscribe(newIndex => $events.emit(EVENTS.UI.SKETCH_CHANGE, newIndex))
+					$events.on(EVENTS.SKETCH.SKETCH_CHANGE, (value) => value !== select.state.value ? select.handleChange.call(select, value) : null)
+				}, {
+					options: Object.keys(Sketches),
+					tag: 'Current sketch'
+				})
+			}
 		}
 
 		// this.setupEventHandlers();

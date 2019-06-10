@@ -11,6 +11,9 @@ export const EVENTS = {
 		SKETCH_CHANGE: 'ui:sketch-change',
 		MASTER_TEMPO_CHANGE: 'ui:master-tempo-change',
 	},
+	SKETCH: {
+		SKETCH_CHANGE: 'sketch:sketch-change'
+	},
 	SOCKET: {
 		SLAVE_CONNECTED: 'socket:slave-connected',
 		BPM_CHANGE: 'host:bpm-change',
@@ -37,7 +40,8 @@ export const KEY_EVENTS = {
 	ARROW_DOWN: 40,
 	ENTER: 13,
 	TAB: 9,
-	ESCAPE: 27
+	ESCAPE: 27,
+	NUMBER_ROW: [1,9]
 }
 
 export const TEMPO_CONFIG = {

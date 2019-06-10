@@ -17,7 +17,7 @@ export default class UIKnob extends UIControl {
 		this.focusKey = focus;
 		this.incrementValue = incrementBy;
 
-		super.setupState();
+		this.setupState();
 		this.setupElement();
 		this.setupHandlers();
 		this.mount();
