@@ -1,4 +1,4 @@
-import Sketch from "@components/Sketch";
+import Sketch from "@/components/Sketch";
 
 export default class CustomSketch extends Sketch {
 

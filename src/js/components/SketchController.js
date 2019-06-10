@@ -14,6 +14,7 @@ const {UI} = EVENTS;
 export class SketchController {
 	constructor() {
 		this.sketches = Object.keys(Sketches).map(key => new Sketches[key]());
+		console.log(this.sketches)
 		this.currentSketch = this.sketches[0];
 		this.transitionProgress = 1.0;
 
@@ -58,7 +59,9 @@ export class SketchController {
 
 	draw() {
 		translate(-width/2, -height/2)
+		push();
 		this.currentSketch.draw($beat);
+		pop();
 		$beat.update()
 	}
 
