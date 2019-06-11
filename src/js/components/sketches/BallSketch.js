@@ -26,11 +26,11 @@ export default class BallSketch extends Sketch {
 	
 	onBeat({tempo, count, beatDuration}) {
 		if (tempo === TEMPOS.FOUR) {
-			TweenLite.to(this.state, beatDuration() / 1000, {
+			TweenLite.to(this.state, beatDuration / 1000, {
 				ballX: count % 2 === 0 ? width/4 : -width/4,
 			});
 			if (count % 2 == 0) {
-				TweenLite.to(this.state, beatDuration()/1.5 / 1000, {
+				TweenLite.to(this.state, beatDuration/1.5 / 1000, {
 					ballY: this.state.ballY < 0 ? height/4 : -height/4
 				})
 			}

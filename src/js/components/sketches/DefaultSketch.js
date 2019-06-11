@@ -1,6 +1,6 @@
 import Sketch from "@/components/Sketch";
 
-export default class CustomSketch extends Sketch {
+export default class DefaultSketch extends Sketch {
 
 	/**
 	 * One time setup for the sketch, called by P5

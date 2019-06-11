@@ -45,24 +45,6 @@ export class UIManager extends UIElement {
 					initial: $beat.bpm,
 					label: 'BPM'
 				}),
-				maxTempo: new UIKnob(this.$el, (knob) => {
-					knob.subscribe(value => $events.emit(EVENTS.UI.SKETCH_CHANGE, value));
-				}, {
-					min: 0,
-					max: Object.keys(Sketches).length - 1,
-					keys: {
-						increment: KEY_EVENTS.ARROW_RIGHT,
-						decrement: KEY_EVENTS.ARROW_LEFT
-					},
-					initial: 0,
-					label: 'SKETCH'
-				})
-				// masterTempo: {
-				// 	ctrl: new UISlider(),
-				// 	attachHandlers: function($ui) {
-				// 		this.subscribe($ui.handlers.onTempoChange)
-				// 	}
-				// }
 			},
 			bottom: {
 				sketchPicker: new UISelect(this.$el, (select) => {
@@ -73,17 +55,6 @@ export class UIManager extends UIElement {
 					tag: 'Current sketch'
 				})
 			}
-		}
-
-		// this.setupEventHandlers();
-	}
-
-	setupEventHandlers() {
-		for (const key in this.sections) {
-			Object.keys(this.sections[key]).forEach(componentKey => {
-				const component = this.sections[key][componentKey]
-				component.attachHandlers.call(component.ctrl, this)
-			})
 		}
 	}
 

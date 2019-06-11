@@ -31,7 +31,7 @@ export default class TempoVisual extends Sketch {
 	onBeat({key, tempo, count, beatDuration}) {
 		return {
 			four: () => {
-				TweenLite.to(this.state, beatDuration() / 1000, {
+				TweenLite.to(this.state, beatDuration / 1000, {
 					redValue: count % 2  === 0 ? 0 : 255
 				})
 			}

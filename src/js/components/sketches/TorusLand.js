@@ -10,6 +10,8 @@ export default class TorusLand extends Sketch {
 	setup(p) {
 		this.angle = 0.01;
 		this.position = 0;
+		this.rotationY = 0;
+		this.rotationX = 0;
 	}
 
 	/**
@@ -19,26 +21,30 @@ export default class TorusLand extends Sketch {
 	 * @param {Function} updateSketch: calls updateSketch and broadcasts new sketch params to the server
 	 */
 	draw({tempos, startTime}) {
-			const {progress} = tempos.two;
-		  background(255);
-		  rectMode(CENTER);
-		  this.angle += 0.00015;
+		const {progress} = tempos.two;
+		  colorMode(HSL, 255)
+		  this.angle += 3;
 		  this.position = progress;
+		  background(this.angle % 255, 255, 100);
+		  rectMode(CENTER);
 
 		  translate(width/2,height/2, -1200);
 
 		  for (var i = 0; i < 1000; i++) {
 		    this.position += 10;
-		    
+		    const z = QUARTER_PI/3 * Math.sin((startTime - Date.now()) / 1000)
+		    const x = -QUARTER_PI/3 * Math.cos((startTime - Date.now()) / 1000)
 		    push();
-		    translate(0, this.position*10, -this.position*10);
-		    fill(255*progress, 255, 255);
-		    torus(200, 60);
-		    
+			    translate(0, this.position*10, -this.position*10);
+			    
+			    fill(z * 255, 255, 100);
+			    rotateY(this.rotationY)
+			    rotateX(this.rotationX)
+			    torus(200, 60); 
 		    pop()
 
-		    rotateZ(QUARTER_PI/2 * Math.sin((startTime - Date.now()) / 10000));
-	   	 	rotateX(-QUARTER_PI/2 * Math.cos((startTime - Date.now()) / 10000))
+		    rotateZ(z);
+	   	 	rotateX(x)
 		    
 		  }
 	}
@@ -49,5 +55,13 @@ export default class TorusLand extends Sketch {
 	 * @param {BPMController Instance: state}  state.count
 	 */
 	onBeat({tempo, count, beatDuration}) {
+		return {
+			two: () =>  {				
+				TweenMax.to(this, beatDuration / 1000, {
+					rotationY: random(0, TWO_PI),
+					rotationX: random(0, TWO_PI)
+				})
+			}
+		}
 	}
 }

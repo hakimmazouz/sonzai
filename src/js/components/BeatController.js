@@ -25,7 +25,7 @@ export class BeatController extends EventEmitter {
 			...TEMPO_CONFIG
 		}
 		Object.keys(this.tempos).filter(k => k !== 'master').forEach(tempoKey => {
-			this.tempos[tempoKey].beatDuration = this.tempos[tempoKey].beatDuration.bind(this)
+			this.tempos[tempoKey].getBeatDuration = this.tempos[tempoKey].getBeatDuration.bind(this)
 		})
 
 		if (ENV.IS_HOST) {
@@ -50,7 +50,7 @@ export class BeatController extends EventEmitter {
 	}
 
 	updateTempo(elapsedTime, key) {
-		const BEAT_IN_MILLISECONDS = this.tempos[key].beatDuration();
+		const BEAT_IN_MILLISECONDS = this.tempos[key].getBeatDuration();
 		const count = Math.floor(elapsedTime / BEAT_IN_MILLISECONDS);
 		const progress = mapConstrain(elapsedTime - BEAT_IN_MILLISECONDS * count, 0, BEAT_IN_MILLISECONDS, 0, 1)
 		if (count > this.tempos[key].count) this.emitBeat(key);
@@ -98,7 +98,7 @@ export class BeatController extends EventEmitter {
 	 * Emits a beat event over the global event bus.
 	 */
 	emitBeat(key) {
-		this.emit('beat', {tempo: key, ...this.tempos[key]});
+		this.emit('beat', {tempo: key, ...this.tempos[key], beatDuration: this.tempos[key].getBeatDuration()});
 		this.emit(key, this.tempos[key]);
 	}
 

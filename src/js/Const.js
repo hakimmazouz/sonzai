@@ -49,7 +49,7 @@ export const TEMPO_CONFIG = {
 		progress: 0,
 		count: 0,
 		label: '1/2',
-		beatDuration: function() {
+		getBeatDuration: function() {
 			return  this.getBaseTempo() * 2
 		}
 	},
@@ -57,7 +57,7 @@ export const TEMPO_CONFIG = {
 		progress: 0,
 		count: 0,
 		label: '1/4',
-		beatDuration: function() {
+		getBeatDuration () {
 			return  this.getBaseTempo()
 		}
 	},
@@ -65,7 +65,7 @@ export const TEMPO_CONFIG = {
 		progress: 0,
 		count: 0,
 		label: '1/8',
-		beatDuration: function() {
+		getBeatDuration: function() {
 			return  this.getBaseTempo() * 0.5
 		}
 	},
@@ -73,7 +73,7 @@ export const TEMPO_CONFIG = {
 		progress: 0,
 		count: 0,
 		label: '1/16',
-		beatDuration: function() {
+		getBeatDuration: function() {
 			return  this.getBaseTempo() * 0.25
 		}
 	}
