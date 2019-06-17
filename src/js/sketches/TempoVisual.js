@@ -1,4 +1,4 @@
-import Sketch from "../Sketch";
+import Sketch from "@/components/Sketch";
 import { TweenLite } from "gsap";
 
 export default class TempoVisual extends Sketch {

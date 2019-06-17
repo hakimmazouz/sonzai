@@ -1,36 +1,25 @@
-import Sketch from "@/components/Sketch";
+import Sketch3D from "@/components/Sketch3D";
 
-export default class TorusLand extends Sketch {
+console.log(Sketch3D);
 
-	/**
-	 * One time setup for the sketch, called by P5
-	 * 
-	 * @param {P5 Instance} p 
-	 */
+export default class TorusLand extends Sketch3D {
 	setup(p) {
 		this.angle = 0.01;
 		this.position = 0;
 		this.rotationY = 0;
 		this.rotationX = 0;
 	}
-
-	/**
-	 * Runs on each requestAnimationFrame call, called by P5
-	 * 
-	 * @param {p5 Instance} p: the current instance of the p5 sketch
-	 * @param {Function} updateSketch: calls updateSketch and broadcasts new sketch params to the server
-	 */
 	draw({tempos, startTime}) {
 		const {progress} = tempos.two;
-		  colorMode(HSL, 255)
-		  this.angle += 3;
-		  this.position = progress;
-		  background(this.angle % 255, 255, 100);
-		  rectMode(CENTER);
+		colorMode(HSL, 255)
+		this.angle += 3;
+		this.position = progress;
+		background(this.angle % 255, 255, 100);
+		rectMode(CENTER);
 
-		  translate(width/2,height/2, -1200);
+		translate(0, 0, -1200)
 
-		  for (var i = 0; i < 1000; i++) {
+		for (var i = 0; i < 1000; i++) {
 		    this.position += 10;
 		    const z = QUARTER_PI/3 * Math.sin((startTime - Date.now()) / 1000)
 		    const x = -QUARTER_PI/3 * Math.cos((startTime - Date.now()) / 1000)

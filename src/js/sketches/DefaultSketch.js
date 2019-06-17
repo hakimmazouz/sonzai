@@ -7,7 +7,7 @@ export default class DefaultSketch extends Sketch {
 	 * 
 	 * @param {P5 Instance} p 
 	 */
-	setup(p) {
+	setup() {
 	}
 
 	/**
