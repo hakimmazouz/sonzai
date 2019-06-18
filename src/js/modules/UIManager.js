@@ -6,7 +6,7 @@ import {ENV, EVENTS, BPM, KEY_EVENTS} from '@/Const'
 import NotificationManager from '@/components/NotificationManager'
 import UIKnob from '@/components/ui/UIKnob';
 import UISelect from '@/components/ui/UISelect'
-import Sketches from '@/components/sketches'
+import Sketches from '@/sketches'
 
 export class UIManager extends UIElement {
 	constructor($container) {

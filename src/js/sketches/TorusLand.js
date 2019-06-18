@@ -14,22 +14,24 @@ export default class TorusLand extends Sketch3D {
 		colorMode(HSL, 255)
 		this.angle += 3;
 		this.position = progress;
-		background(this.angle % 255, 255, 100);
+		background(this.angle % 255, 255, 10);
 		rectMode(CENTER);
-
-		translate(0, 0, -1200)
+		translate(0,0,-600)
+		ambientLight(60, 60, 60);
+		pointLight(255, 255, 255, 0, 0, 100);
 
 		for (var i = 0; i < 1000; i++) {
 		    this.position += 10;
 		    const z = QUARTER_PI/3 * Math.sin((startTime - Date.now()) / 1000)
 		    const x = -QUARTER_PI/3 * Math.cos((startTime - Date.now()) / 1000)
 		    push();
-			    translate(0, this.position*10, -this.position*10);
-			    
-			    fill(z * 255, 255, 100);
-			    rotateY(this.rotationY)
-			    rotateX(this.rotationX)
-			    torus(200, 60); 
+			translate(0, this.position*10, -this.position*10);
+			
+			//fill(z * 255, 255, 100);
+			specularMaterial(z * 255, 255, 100);
+			rotateY(this.rotationY)
+			rotateX(this.rotationX)
+			torus(200, 60); 
 		    pop()
 
 		    rotateZ(z);
