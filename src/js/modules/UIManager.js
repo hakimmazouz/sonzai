@@ -7,6 +7,7 @@ import NotificationManager from '@/components/NotificationManager'
 import UIKnob from '@/components/ui/UIKnob';
 import UISelect from '@/components/ui/UISelect'
 import Sketches from '@/sketches'
+import $sketchController from '@/components/SketchController'
 
 export class UIManager extends UIElement {
 	constructor($container) {
@@ -52,6 +53,7 @@ export class UIManager extends UIElement {
 					$events.on(EVENTS.SKETCH.SKETCH_CHANGE, (value) => value !== select.state.value ? select.handleChange.call(select, value) : null)
 				}, {
 					options: Object.keys(Sketches),
+					initial: $sketchController.sketches.indexOf($sketchController.currentSketch),
 					tag: 'Current sketch'
 				})
 			}

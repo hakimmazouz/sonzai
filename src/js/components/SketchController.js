@@ -5,14 +5,15 @@ import $io from '@/Sockets'
 import $beat from './BeatController'
 import Sketches from '@/sketches'
 import {EVENTS, ENV} from '@/Const'
-import { remove } from 'fp-ts/lib/Record';
+import Persist from '@mojo/Persist'
 import Sketch3D from './Sketch3D';
+import {constrain} from '@mojo/Helpers'
 const {UI} = EVENTS;
 
 export class SketchController {
 	constructor() {
 		this.sketches = Object.keys(Sketches).map(key => new Sketches[key]());
-		this.currentSketch = this.sketches[0];
+		this.currentSketch = Persist.exists('sketchIndex') ? this.sketches[constrain(Persist.get('sketchIndex'), 0, this.sketches.length - 1)] : this.sketches[0];
 		this.init()
 		this.attachListeners();
 	}
@@ -34,7 +35,7 @@ export class SketchController {
 	}
 	changeSketch(index) {
 		const nextSketch = this.sketches[index];
-		console.log(nextSketch instanceof Sketch3D)
+		Persist.set('sketchIndex', index);
 		if (nextSketch instanceof Sketch3D && !(this.currentSketch instanceof Sketch3D)) this.changeRenderer(WEBGL)
 		if (!(nextSketch instanceof Sketch3D) && this.currentSketch instanceof Sketch3D) this.changeRenderer(P2D)
 		this.currentSketch = nextSketch;
