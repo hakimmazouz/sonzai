@@ -4,22 +4,21 @@ import { mapConstrain } from '@mojo/Helpers';
 import $midi from '@mojo/MIDI';
 import $events from '@mojo/EventEmitter'
 import $keyboard from '@mojo/Keyboard'
+import Persist from '@mojo/Persist'
 import {TEMPO_CONFIG, TEMPOS, ENV, EVENTS, KEY_EVENTS} from './../Const'
 
 export class BeatController extends EventEmitter {
 	constructor() {
 		super();
-		this.isHost = window.location.hostname.includes('localhost');
 		this.setup();
 	}
-
 	/**
 	 * Sets the standard state for the BPMController
 	 * and listens for an update event on the socket
 	 */
 	setup() {
-		this.bpm = 100;
-		this.startTime = Date.now()
+		this.bpm = Persist.exists('bpm') ? Persist.get('bpm') : 100;
+		this.startTime = Persist.exists('startTime') ? Persist.get('startTime') : Date.now();
 		this.tempos =  {
 			master: 'four',
 			...TEMPO_CONFIG
@@ -80,6 +79,7 @@ export class BeatController extends EventEmitter {
 
 	sync() {
 		this.startTime = Date.now();
+		Persist.set('startTime', this.startTime)
 		$io.updateBPM({bpm: this.bpm, startTime: this.startTime})
 	}
 
@@ -126,10 +126,12 @@ export class BeatController extends EventEmitter {
 		$events.on(EVENTS.UI.BPM_CHANGE, value => {
 			this.bpm = value;
 			$io.updateBPM(this.bpm)
+			Persist.set('bpm', this.bpm)
 		})
 		$events.on(EVENTS.UI.MASTER_TEMPO_CHANGE, value => {
 			this.tempos.master = value;
 			$io.updateMasterTempo(this.masterTempoChange)
+			Persist.set('masterTempo', this.masterTempo)
 		})
 
 		$keyboard.on(KEY_EVENTS.SPACEBAR, () => this.sync())
