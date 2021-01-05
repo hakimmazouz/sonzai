@@ -38,7 +38,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
     "@popmotion/popcorn": "^0.3.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.1",
     "gsap": "^2.0.2",
