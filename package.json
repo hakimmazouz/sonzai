@@ -43,7 +43,7 @@
     "express-http-proxy": "^1.5.1",
     "gsap": "^2.0.2",
     "handlebars": "^4.0.12",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "p5": "^0.7.3",
     "socket.io": "^2.2.0"
   }
